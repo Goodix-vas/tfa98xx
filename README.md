@@ -1,6 +1,5 @@
 # tfa98xx
 Goodix Multi-Media Solutions Software for TFA98XX Devices
-MMS Software for TFA Devices
 
 Multi-Media Solutions software solutions for portable equipment and audio component designs is a leading performer for sound, robustness and EMC performance.
 The MMS software solutions has louder sound from small speakers, deeper bass, better sound quality and longer life. 

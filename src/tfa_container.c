@@ -690,6 +690,10 @@ enum Tfa98xx_Error tfaContWriteFile(struct tfa_device *tfa, TfaFileDsc_t *file, 
                 }
 				for (i = 0; i<4; i++)
 				{
+					if (tfa->fw_itf_ver[1] >= 34)    // HSS-2353 : SB5.0 and greater 
+						if (i == 2)					  // ITF version check skipped in the 3rd field, update field 
+							continue;
+
 					if (tfa->fw_itf_ver[i] != hdr->customer[i + 4]) //+4 to skip "?PIV" string part in the .msg file.
 					{
 						ERRORMSG("Error: tfaContWriteFile: Expected FW API version = %d.%d.%d.%d, Msg File version: %d.%d.%d.%d \n",
@@ -1637,7 +1641,7 @@ enum Tfa98xx_Error tfaContWriteProfile(struct tfa_device *tfa, int prof_idx, int
 	enum Tfa98xx_Error err = Tfa98xx_Error_Ok;
 	TfaProfileList_t *prof = tfaContGetDevProfList(tfa->cnt, tfa->dev_idx, prof_idx);
 	TfaProfileList_t *previous_prof = tfaContGetDevProfList(tfa->cnt, tfa->dev_idx, tfa_dev_get_swprof(tfa));
-	char buffer[(MEMTRACK_MAX_WORDS * 4) + 4] = { 0 }; //every word requires 3 or 4 bytes, and 3 or 4 is the msg
+	char *buffer = 0;
 	unsigned int i, k = 0, j = 0, tries = 0;
 	TfaFileDsc_t *file;
 	int manstate, size = 0, ready, fs_previous_profile = 8; /* default fs is 48kHz*/
@@ -1874,6 +1878,8 @@ enum Tfa98xx_Error tfaContWriteProfile(struct tfa_device *tfa, int prof_idx, int
 		}
 	}
 
+	buffer = (char*) kmalloc(((MEMTRACK_MAX_WORDS * 4) + 4) * sizeof(char), GFP_KERNEL); //every word requires 3 or 4 bytes, and 3 or 4 is the msg
+
 	/* write everything until end or the default section starts
 	 * Start where we currenly left */
 	for (i = j; i < prof->length; i++) {
@@ -1930,13 +1936,14 @@ enum Tfa98xx_Error tfaContWriteProfile(struct tfa_device *tfa, int prof_idx, int
 		default:
 			/* This allows us to write bitfield, registers or xmem after files */
 			if (tfaContWriteItem(tfa, &prof->list[i]) != Tfa98xx_Error_Ok) {
-				return Tfa98xx_Error_Bad_Parameter;
+				err = Tfa98xx_Error_Bad_Parameter;
+				goto exit_return;
 			}
 			break;
 		}
 
-		if (err != Tfa98xx_Error_Ok) {
-			return err;
+		if (err != Tfa98xx_Error_Ok) {	
+			goto exit_return;
 		}
 	}
 
@@ -1947,7 +1954,10 @@ enum Tfa98xx_Error tfaContWriteProfile(struct tfa_device *tfa, int prof_idx, int
 		}
 	}
 
+exit_return:
+	kfree(buffer);
 	return err;
+
 }
 
 /*

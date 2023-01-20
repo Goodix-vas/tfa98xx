@@ -562,6 +562,85 @@ r_c_err:
 	return ret;
 }
 
+static ssize_t tfa98xx_dbgfs_dieid_read(struct file *file,
+	char __user *user_buf, size_t count,
+	loff_t *ppos)
+{
+
+	int i, ret;
+	struct i2c_client *i2c = file->private_data;
+	struct tfa98xx *tfa98xx = i2c_get_clientdata(i2c);
+	unsigned int readingreg[5];
+	char dieid_string[22];
+	mutex_lock(&tfa98xx->dsp_lock);
+	for (i = 0xFA; i <= 0xFE; i++)
+	{
+		ret = regmap_read(tfa98xx->regmap, i, (readingreg + i - 0xFA));
+		if (ret < 0)
+		{
+			dev_err(&i2c->dev, "Failed to read data register: %d\n",
+					ret);
+			return -EIO;
+		}
+	}
+	i=0;
+	while (i < 5)
+    {
+        snprintf(dieid_string + i * 4, 5, "%04x",readingreg[i]);	
+        i++;
+    }
+	snprintf(dieid_string + 20,2,"\n");
+	mutex_unlock(&tfa98xx->dsp_lock);
+	dev_dbg(&i2c->dev, "%s: DIEIDString : %s\n", __func__,dieid_string);
+
+	return simple_read_from_buffer(user_buf, count, ppos, dieid_string, sizeof(dieid_string));
+}
+
+static int tfa98xx_print_is_probus(struct seq_file *f, void *p)
+{
+	struct tfa98xx *tfa98xx = f->private;
+	int cf_enabled;
+
+	mutex_lock(&tfa98xx->dsp_lock);
+	cf_enabled = tfa_cf_enabled(tfa98xx->tfa);
+	mutex_unlock(&tfa98xx->dsp_lock);
+	
+	seq_printf(f, "%i\n", cf_enabled);
+
+	return 0;
+}
+
+static int tfa98xx_dbgfs_probus_open(struct inode *inode, struct file *file)
+{
+	struct i2c_client *i2c = (struct i2c_client *)inode->i_private;
+	struct tfa98xx *tfa98xx = i2c_get_clientdata(i2c);
+
+	if ( !tfa98xx->tfa->dev_ops.tfa_init ) {
+		dev_err(&tfa98xx->i2c->dev, "%s: tfa (0x%02x) not fully probed, wrong config.\n",
+				__func__, i2c->addr);
+		return -EINVAL;
+	}
+
+	return single_open(file, tfa98xx_print_is_probus, tfa98xx);
+}
+
+static int tfa98xx_print_device_name(struct seq_file *f, void *p)
+{
+	struct tfa98xx *tfa98xx = f->private;
+	char *name = tfaContDeviceName(tfa98xx->tfa->cnt, tfa98xx->tfa->dev_idx);
+	seq_printf(f, "%s\n", name);
+
+	return 0;
+}
+
+static int tfa98xx_dbgfs_name_open(struct inode *inode, struct file *file)
+{
+	struct i2c_client *i2c = (struct i2c_client *)inode->i_private;
+	struct tfa98xx *tfa98xx = i2c_get_clientdata(i2c);
+
+	return single_open(file, tfa98xx_print_device_name, tfa98xx);
+}
+
 static ssize_t tfa98xx_dbgfs_version_read(struct file *file,
 	char __user *user_buf, size_t count,
 	loff_t *ppos)
@@ -848,6 +927,29 @@ static const struct file_operations tfa98xx_dbgfs_version_fops = {
 	.llseek = default_llseek,
 };
 
+static const struct file_operations tfa98xx_dbgfs_dieid_fops = {
+	.owner  = THIS_MODULE,
+	.open   = simple_open,
+	.read   = tfa98xx_dbgfs_dieid_read,
+	.llseek = default_llseek,
+};
+
+static const struct file_operations tfa98xx_dbgfs_name_fops = {
+	.owner   = THIS_MODULE,
+	.open    = tfa98xx_dbgfs_name_open,
+	.read    = seq_read,
+	.llseek  = seq_lseek,
+	.release = single_release,
+};
+
+static const struct file_operations tfa98xx_dbgfs_probus_fops = {
+	.owner   = THIS_MODULE,
+	.open    = tfa98xx_dbgfs_probus_open,
+	.read    = seq_read,
+	.llseek  = seq_lseek,
+	.release = single_release,
+};
+
 static const struct file_operations tfa98xx_dbgfs_dsp_state_fops = {
 	.owner = THIS_MODULE,
 	.open = simple_open,
@@ -877,16 +979,25 @@ static void tfa98xx_debug_init(struct tfa98xx *tfa98xx, struct i2c_client *i2c)
 
 	scnprintf(name, MAX_CONTROL_NAME, "%s-%x", i2c->name, i2c->addr);
 	tfa98xx->dbg_dir = debugfs_create_dir(name, NULL);
-	debugfs_create_file("OTC", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
-		i2c, &tfa98xx_dbgfs_calib_otc_fops);
-	debugfs_create_file("MTPEX", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
-		i2c, &tfa98xx_dbgfs_calib_mtpex_fops);
+	if (!(tfa98xx->flags & TFA98XX_FLAG_OTP_TYPE_DEVICE))
+	{
+		debugfs_create_file("OTC", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
+			i2c, &tfa98xx_dbgfs_calib_otc_fops);
+		debugfs_create_file("MTPEX", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
+			i2c, &tfa98xx_dbgfs_calib_mtpex_fops);
+		debugfs_create_file("R", S_IRUGO, tfa98xx->dbg_dir,
+			i2c, &tfa98xx_dbgfs_r_fops);
+	}
+	debugfs_create_file("DIEID", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
+		i2c, &tfa98xx_dbgfs_dieid_fops);
+	debugfs_create_file("name", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
+		i2c, &tfa98xx_dbgfs_name_fops);
+	debugfs_create_file("probus", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
+		i2c, &tfa98xx_dbgfs_probus_fops);
 	debugfs_create_file("TEMP", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
 		i2c, &tfa98xx_dbgfs_calib_temp_fops);
 	debugfs_create_file("calibrate", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
 		i2c, &tfa98xx_dbgfs_calib_start_fops);
-	debugfs_create_file("R", S_IRUGO, tfa98xx->dbg_dir,
-		i2c, &tfa98xx_dbgfs_r_fops);
 	debugfs_create_file("version", S_IRUGO, tfa98xx->dbg_dir,
 		i2c, &tfa98xx_dbgfs_version_fops);
 	debugfs_create_file("dsp-state", S_IRUGO | S_IWUGO, tfa98xx->dbg_dir,
@@ -3132,6 +3243,12 @@ static int tfa98xx_i2c_probe(struct i2c_client *i2c,
 			tfa98xx->flags |= TFA98XX_FLAG_CALIBRATION_CTL;
 			tfa98xx->flags |= TFA98XX_FLAG_TDM_DEVICE;
 			break;
+		case 0x65: /* tfa9865*/
+			pr_info("TFA9865 detected\n");
+			tfa98xx->flags |= TFA98XX_FLAG_CALIBRATION_CTL;
+			tfa98xx->flags |= TFA98XX_FLAG_TDM_DEVICE;
+			tfa98xx->flags |= TFA98XX_FLAG_OTP_TYPE_DEVICE;
+			break;
 		case 0x88: /* tfa9888 */
 			pr_info("TFA9888 detected\n");
 			tfa98xx->flags |= TFA98XX_FLAG_STEREO_DEVICE;
@@ -3318,6 +3435,7 @@ static struct of_device_id tfa98xx_dt_match[] = {
 	{.compatible = "tfa,tfa9875" },
 	{.compatible = "tfa,tfa9874" },
 	{.compatible = "tfa,tfa9878" },
+	{.compatible = "tfa,tfa9865" },
 	{.compatible = "tfa,tfa9888" },
 	{.compatible = "tfa,tfa9890" },
 	{.compatible = "tfa,tfa9891" },

@@ -3245,7 +3245,6 @@ static int tfa98xx_i2c_probe(struct i2c_client *i2c,
 			break;
 		case 0x65: /* tfa9865*/
 			pr_info("TFA9865 detected\n");
-			tfa98xx->flags |= TFA98XX_FLAG_CALIBRATION_CTL;
 			tfa98xx->flags |= TFA98XX_FLAG_TDM_DEVICE;
 			tfa98xx->flags |= TFA98XX_FLAG_OTP_TYPE_DEVICE;
 			break;

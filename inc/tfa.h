@@ -38,8 +38,6 @@ void tfa_devs_destroy(int count);
 
 struct tfa_device ** tfa_get_device_struct(void);
 
-int tfa_plop_noise_interrupt(struct tfa_device *tfa, int profile, int vstep);
-void tfa_lp_mode_interrupt(struct tfa_device *tfa);
 void tfa_adapt_noisemode(struct tfa_device *tfa);
 
 #endif /* TFA_H_ */

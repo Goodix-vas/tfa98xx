@@ -97,9 +97,7 @@ static int pcm_no_constraint = 0;
 module_param(pcm_no_constraint, int, S_IRUGO);
 MODULE_PARM_DESC(pcm_no_constraint, "do not use constraints for PCM parameters\n");
 
-static void tfa98xx_tapdet_check_update(struct tfa98xx *tfa98xx);
 static int tfa98xx_get_fssel(unsigned int rate);
-static void tfa98xx_interrupt_enable(struct tfa98xx *tfa98xx, bool enable);
 
 static int get_profile_from_list(char *buf, int id);
 static int get_profile_id_for_sr(int id, unsigned int rate);
@@ -178,16 +176,13 @@ static enum tfa_error tfa98xx_tfa_start(struct tfa98xx *tfa98xx, int next_profil
 		}
 	}
 
-	/* Check and update tap-detection state (in case of profile change) */
-	tfa98xx_tapdet_check_update(tfa98xx);
-
 	/* Remove sticky bit by reading it once */
 	tfa_get_noclk(tfa98xx->tfa);
 
 	/* A cold start erases the configuration, including interrupts setting.
 	 * Restore it if required
 	 */
-	tfa98xx_interrupt_enable(tfa98xx, true);
+	// tfa98xx_interrupt_enable(tfa98xx, true);
 
 	return err;
 }
@@ -206,10 +201,6 @@ static int tfa98xx_input_open(struct input_dev *dev)
 		return -EIO;
 	}
 
-	/* enable tap-detection service */
-	tfa98xx->tapdet_open = true;
-	tfa98xx_tapdet_check_update(tfa98xx);
-
 	return 0;
 }
 
@@ -220,10 +211,6 @@ static void tfa98xx_input_close(struct input_dev *dev)
 	dev_dbg(tfa98xx->codec->dev, "closing device file\n");
 
 	/* Note: close function is called if the device is unregistered */
-
-	/* disable tap-detection service */
-	tfa98xx->tapdet_open = false;
-	tfa98xx_tapdet_check_update(tfa98xx);
 }
 
 static int tfa98xx_register_inputdev(struct tfa98xx *tfa98xx)
@@ -2067,84 +2054,6 @@ retry:
 
 /* Interrupts management */
 
-static void tfa98xx_interrupt_enable_tfa2(struct tfa98xx *tfa98xx, bool enable)
-{
-	/* Only for 0x72 we need to enable NOCLK interrupts */
-	if (tfa98xx->flags & TFA98XX_FLAG_REMOVE_PLOP_NOISE)
-		tfa_irq_ena(tfa98xx->tfa, tfa9912_irq_stnoclk, enable);
-
-	if (tfa98xx->flags & TFA98XX_FLAG_LP_MODES) {
-		tfa_irq_ena(tfa98xx->tfa, 36, enable); /* FIXME: IELP0 does not excist for 9912 */
-		tfa_irq_ena(tfa98xx->tfa, tfa9912_irq_stclpr, enable);
-	}
-}
-
-/* Check if tap-detection can and shall be enabled.
- * Configure SPK interrupt accordingly or setup polling mode
- * Tap-detection shall be active if:
- *  - the service is enabled (tapdet_open), AND
- *  - the current profile is a tap-detection profile
- * On TFA1 familiy of devices, activating tap-detection means enabling the SPK
- * interrupt if available.
- * We also update the tapdet_enabled and tapdet_poll variables.
- */
-static void tfa98xx_tapdet_check_update(struct tfa98xx *tfa98xx)
-{
-	unsigned int enable = false;
-
-	/* Support tap-detection on TFA1 family of devices */
-	if ((tfa98xx->flags & TFA98XX_FLAG_TAPDET_AVAILABLE) == 0)
-		return;
-
-	if (tfa98xx->tapdet_open &&
-		(tfa98xx->tapdet_profiles & (1 << tfa98xx->profile)))
-		enable = true;
-
-	if (!gpio_is_valid(tfa98xx->irq_gpio)) {
-		/* interrupt not available, setup polling mode */
-		tfa98xx->tapdet_poll = true;
-		if (enable)
-			queue_delayed_work(tfa98xx->tfa98xx_wq,
-				&tfa98xx->tapdet_work, HZ / 10);
-		else
-			cancel_delayed_work_sync(&tfa98xx->tapdet_work);
-		dev_dbg(tfa98xx->codec->dev,
-			"Polling for tap-detection: %s (%d; 0x%x, %d)\n",
-			enable ? "enabled" : "disabled",
-			tfa98xx->tapdet_open, tfa98xx->tapdet_profiles,
-			tfa98xx->profile);
-
-	}
-	else {
-		dev_dbg(tfa98xx->codec->dev,
-			"Interrupt for tap-detection: %s (%d; 0x%x, %d)\n",
-			enable ? "enabled" : "disabled",
-			tfa98xx->tapdet_open, tfa98xx->tapdet_profiles,
-			tfa98xx->profile);
-		/*  enabled interrupt */
-		tfa_irq_ena(tfa98xx->tfa, tfa9912_irq_sttapdet, enable);
-	}
-
-	/* check disabled => enabled transition to clear pending events */
-	if (!tfa98xx->tapdet_enabled && enable) {
-		/* clear pending event if any */
-		tfa_irq_clear(tfa98xx->tfa, tfa9912_irq_sttapdet);
-	}
-
-	if (!tfa98xx->tapdet_poll)
-		tfa_irq_ena(tfa98xx->tfa, tfa9912_irq_sttapdet, 1); /* enable again */
-}
-
-/* global enable / disable interrupts */
-static void tfa98xx_interrupt_enable(struct tfa98xx *tfa98xx, bool enable)
-{
-	if (tfa98xx->flags & TFA98XX_FLAG_SKIP_INTERRUPTS)
-		return;
-
-	if (tfa98xx->tfa->tfa_family == 2)
-		tfa98xx_interrupt_enable_tfa2(tfa98xx, enable);
-}
-
 /* Firmware management */
 static void tfa98xx_container_loaded(const struct firmware *cont, void *context)
 {
@@ -2277,8 +2186,7 @@ static void tfa98xx_container_loaded(const struct firmware *cont, void *context)
 		if (ret == Tfa98xx_Error_Not_Supported)
 			tfa98xx->dsp_fw_state = TFA98XX_DSP_FW_FAIL;
 		mutex_unlock(&tfa98xx->dsp_lock);
-	}		
-	tfa98xx_interrupt_enable(tfa98xx, true);
+	}
 }
 
 static int tfa98xx_load_container(struct tfa98xx *tfa98xx)
@@ -2290,54 +2198,6 @@ static int tfa98xx_load_container(struct tfa98xx *tfa98xx)
 		tfa98xx, tfa98xx_container_loaded);
 }
 
-
-static void tfa98xx_tapdet(struct tfa98xx *tfa98xx)
-{
-	unsigned int tap_pattern;
-	int btn;
-
-	/* check tap pattern (BTN_0 is "error" wrong tap indication */
-	tap_pattern = tfa_get_tap_pattern(tfa98xx->tfa);
-	switch (tap_pattern) {
-	case 0xffffffff:
-		pr_info("More than 4 taps detected! (flagTapPattern = -1)\n");
-		btn = BTN_0;
-		break;
-	case 0xfffffffe:
-	case 0xfe:
-		pr_info("Illegal tap detected!\n");
-		btn = BTN_0;
-		break;
-	case 0:
-		pr_info("Unrecognized pattern! (flagTapPattern = 0)\n");
-		btn = BTN_0;
-		break;
-	default:
-		pr_info("Detected pattern: %d\n", tap_pattern);
-		btn = BTN_0 + tap_pattern;
-		break;
-	}
-
-	input_report_key(tfa98xx->input, btn, 1);
-	input_report_key(tfa98xx->input, btn, 0);
-	input_sync(tfa98xx->input);
-
-	/* acknowledge event done by clearing interrupt */
-
-}
-
-static void tfa98xx_tapdet_work(struct work_struct *work)
-{
-	struct tfa98xx *tfa98xx;
-
-	//TODO check is this is still needed for tap polling
-	tfa98xx = container_of(work, struct tfa98xx, tapdet_work.work);
-
-	if (tfa_irq_get(tfa98xx->tfa, tfa9912_irq_sttapdet))
-		tfa98xx_tapdet(tfa98xx);
-
-	queue_delayed_work(tfa98xx->tfa98xx_wq, &tfa98xx->tapdet_work, HZ / 10);
-}
 static void tfa98xx_nmode_update_work(struct work_struct *work)
 {
 	struct tfa98xx *tfa98xx;
@@ -2495,33 +2355,7 @@ static void tfa98xx_interrupt(struct work_struct *work)
 {
 	struct tfa98xx *tfa98xx = container_of(work, struct tfa98xx, interrupt_work.work);
 
-	pr_info("\n");
-
-	if (tfa98xx->flags & TFA98XX_FLAG_TAPDET_AVAILABLE) {
-		/* check for tap interrupt */
-		if (tfa_irq_get(tfa98xx->tfa, tfa9912_irq_sttapdet)) {
-			tfa98xx_tapdet(tfa98xx);
-
-			/* clear interrupt */
-			tfa_irq_clear(tfa98xx->tfa, tfa9912_irq_sttapdet);
-		}
-	} /* TFA98XX_FLAG_TAPDET_AVAILABLE */
-
-	if (tfa98xx->flags & TFA98XX_FLAG_REMOVE_PLOP_NOISE) {
-		int start_triggered;
-
-		mutex_lock(&tfa98xx->dsp_lock);
-		start_triggered = tfa_plop_noise_interrupt(tfa98xx->tfa, tfa98xx->profile, tfa98xx->vstep);
-		/* Only enable when the return value is 1, otherwise the interrupt is triggered twice */
-		if (start_triggered)
-			tfa98xx_interrupt_enable(tfa98xx, true);
-		mutex_unlock(&tfa98xx->dsp_lock);
-	} /* TFA98XX_FLAG_REMOVE_PLOP_NOISE */
-
-	if (tfa98xx->flags & TFA98XX_FLAG_LP_MODES) {
-		tfa_lp_mode_interrupt(tfa98xx->tfa);
-	} /* TFA98XX_FLAG_LP_MODES */
-
+	
 	/* unmask interrupts masked in IRQ handler */
 	tfa_irq_unmask(tfa98xx->tfa);
 }
@@ -2856,7 +2690,6 @@ static int tfa98xx_probe(struct snd_soc_codec *codec)
 	INIT_DELAYED_WORK(&tfa98xx->init_work, tfa98xx_dsp_init_work);
 	INIT_DELAYED_WORK(&tfa98xx->monitor_work, tfa98xx_monitor);
 	INIT_DELAYED_WORK(&tfa98xx->interrupt_work, tfa98xx_interrupt);
-	INIT_DELAYED_WORK(&tfa98xx->tapdet_work, tfa98xx_tapdet_work);
 	INIT_DELAYED_WORK(&tfa98xx->nmodeupdate_work, tfa98xx_nmode_update_work);
 
 	tfa98xx->codec = codec;
@@ -2891,14 +2724,11 @@ static int tfa98xx_remove(struct snd_soc_codec *codec)
 #endif
 	pr_debug("\n");
 
-	tfa98xx_interrupt_enable(tfa98xx, false);
-
 	tfa98xx_inputdev_unregister(tfa98xx);
 
 	cancel_delayed_work_sync(&tfa98xx->interrupt_work);
 	cancel_delayed_work_sync(&tfa98xx->monitor_work);
 	cancel_delayed_work_sync(&tfa98xx->init_work);
-	cancel_delayed_work_sync(&tfa98xx->tapdet_work);
 	cancel_delayed_work_sync(&tfa98xx->nmodeupdate_work);
 
 	if (tfa98xx->tfa98xx_wq)
@@ -2964,13 +2794,11 @@ static const struct regmap_config tfa98xx_regmap = {
 
 static void tfa98xx_irq_tfa2(struct tfa98xx *tfa98xx)
 {
-	pr_info("\n");
-
 	/*
 	 * mask interrupts
 	 * will be unmasked after handling interrupts in workqueue
 	 */
-	tfa_irq_mask(tfa98xx->tfa);
+	//tfa_irq_mask(tfa98xx->tfa);
 	queue_delayed_work(tfa98xx->tfa98xx_wq, &tfa98xx->interrupt_work, 0);
 }
 
@@ -3008,6 +2836,8 @@ static int tfa98xx_parse_dt(struct device *dev, struct tfa98xx *tfa98xx,
 	tfa98xx->irq_gpio = of_get_named_gpio(np, "irq-gpio", 0);
 	if (tfa98xx->irq_gpio < 0)
 		dev_dbg(dev, "No IRQ GPIO provided.\n");
+	else
+		dev_dbg(dev, "IRQ found: %d\n", tfa98xx->irq_gpio);
 	ret = of_property_read_u32(np,"reset-polarity",&value);
 	if(ret< 0)
 	{
@@ -3384,12 +3214,9 @@ static int tfa98xx_i2c_remove(struct i2c_client *i2c)
 
 	pr_debug("addr=0x%x\n", i2c->addr);
 
-	tfa98xx_interrupt_enable(tfa98xx, false);
-
 	cancel_delayed_work_sync(&tfa98xx->interrupt_work);
 	cancel_delayed_work_sync(&tfa98xx->monitor_work);
 	cancel_delayed_work_sync(&tfa98xx->init_work);
-	cancel_delayed_work_sync(&tfa98xx->tapdet_work);
 	cancel_delayed_work_sync(&tfa98xx->nmodeupdate_work);
 
 	device_remove_bin_file(&i2c->dev, &dev_attr_reg);

@@ -85,7 +85,6 @@ struct tfa98xx {
 	struct delayed_work init_work;
 	struct delayed_work monitor_work;
 	struct delayed_work interrupt_work;
-	struct delayed_work tapdet_work;
 	struct delayed_work nmodeupdate_work;
 	struct mutex dsp_lock;
 	int dsp_init;
@@ -104,7 +103,6 @@ struct tfa98xx {
 	int cstream;
 	struct input_dev *input;
 	bool tapdet_enabled;		/* service enabled */
-	bool tapdet_open;		/* device file opened */
 	unsigned int tapdet_profiles;	/* tapdet profile bitfield */
 	bool tapdet_poll;		/* tapdet running on polling mode */
 

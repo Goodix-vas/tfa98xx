@@ -308,8 +308,16 @@ int tfa_irq_mask(struct tfa_device *tfa);
  * unmask interrupts by enabling them again
  */
 int tfa_irq_unmask(struct tfa_device *tfa);
-//cnt read
-//debug?
+
+/* new interrupt functions for non-coolflux devices not using tfa9912_irq defs */
+/*
+ * initialize interrupt registers
+ */
+void tfa_irq_init(struct tfa_device *tfa);
+/*
+ * report interrupt status
+ */
+int tfa_irq_report(struct tfa_device *tfa);
 
 #endif /* __TFA_DEVICE_H__ */
 

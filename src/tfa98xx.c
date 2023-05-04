@@ -2355,7 +2355,10 @@ static void tfa98xx_interrupt(struct work_struct *work)
 {
 	struct tfa98xx *tfa98xx = container_of(work, struct tfa98xx, interrupt_work.work);
 
-	
+	mutex_lock(&tfa98xx->dsp_lock);
+	tfa_irq_report(tfa98xx->tfa);	
+	mutex_unlock(&tfa98xx->dsp_lock);
+
 	/* unmask interrupts masked in IRQ handler */
 	tfa_irq_unmask(tfa98xx->tfa);
 }

@@ -889,6 +889,19 @@ enum tfa9865_irq {
 	tfa9865_irq_max = -1,
 	tfa9865_irq_all = -1 /* all irqs */};
 
-#define TFA9865_IRQ_NAMETABLE static tfaIrqName_t Tfa9865IrqNames[]= {\
-};
+#define TFA986X_IRQ_NAMETABLE tfaIrqName_t tfa986x_irq_names[] = {\
+	{0, "STVDDS"},\
+	{1, "STBSTOC"},\
+	{2, "STOTDS"},\
+	{3, "STOCPR"},\
+	{4, "STUVDS"},\
+	{5, "STTDMER"},\
+	{6, "STNOCLK"},\
+	{7, "STDCTH"},\
+	{8, "STBODNOK"},\
+	{9, "STCOOR"},\
+	{10, "STOVDS"},\
+	{11, "STQPFAIL"},\
+	{12, "12"},\
+}
 #endif /* _TFA9865_TFAFIELDNAMES_H */

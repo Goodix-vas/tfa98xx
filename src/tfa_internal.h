@@ -29,5 +29,11 @@
 TFA_INTERNAL enum Tfa98xx_Error tfa98xx_check_rpc_status(struct tfa_device *tfa, int *pRpcStatus);
 TFA_INTERNAL enum Tfa98xx_Error tfa98xx_wait_result(struct tfa_device *tfa, int waitRetryCount);
 
+/* bitfield extraction macros */
+#define TFA_BF_REG(bf) ((bf & (0xff00)) >> 8)
+#define TFA_BF_POS(bf) ((bf & (0xf0)) >> 4)
+#define TFA_BF_WIDTH(bf) ((bf & (0x0f)) + 1)
+#define TFA_BF_MSK(bf) (((1 << TFA_BF_WIDTH(bf)) - 1) << TFA_BF_POS(bf))
+
 #endif /* __TFA_INTERNAL_H__ */
 

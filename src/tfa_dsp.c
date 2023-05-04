@@ -169,6 +169,12 @@ int tfa_irq_mask(struct tfa_device *tfa)
 {
 	int reg;
 
+	if ( tfa->dev_ops.get_mtpb ) /* new types have only 1 reg */
+	{
+		tfa_reg_write(tfa, TFA98XX_INTERRUPT_ENABLE_REG1, 0);
+		return 0;
+	}
+
 	/* operate on all bits */
 	for (reg = TFA98XX_INTERRUPT_ENABLE_REG1; reg <= TFA98XX_INTERRUPT_ENABLE_REG1 + tfa9912_irq_max / 16; reg++)
 		tfa_reg_write(tfa, (unsigned char)reg, 0);
@@ -182,6 +188,12 @@ int tfa_irq_mask(struct tfa_device *tfa)
 int tfa_irq_unmask(struct tfa_device *tfa)
 {
 	int reg;
+
+	if ( tfa->dev_ops.get_mtpb ) /* new types have only 1 reg */
+	{
+		tfa_reg_write(tfa, TFA98XX_INTERRUPT_ENABLE_REG1, tfa->interrupt_enable[0]);
+		return 0;
+	}
 
 	/* operate on all bits */
 	for (reg = TFA98XX_INTERRUPT_ENABLE_REG1; reg <= TFA98XX_INTERRUPT_ENABLE_REG1 + tfa9912_irq_max / 16; reg++)
@@ -222,6 +234,101 @@ int tfa_irq_set_pol(struct tfa_device *tfa, enum tfa9912_irq bit, int state)
 		return -1;
 
 	return 0;
+}
+
+/* new interrupt functions for non-coolflux devices not using tfa9912_irq defs */
+static char *tfa986x_irq_info[] = {
+	"Power on reset",
+	"Overcurrent booster",
+	"Overtemperature",
+	"Overcurrent amp",
+	"Undervoltage",
+	"TDM error",
+	"Lost clock",
+	"DC too high amp",
+	"Brown out VDDD",
+	"Clock out of range",
+	"Overvoltage protection",
+	"Qpump fail"};
+
+TFA986X_IRQ_NAMETABLE;
+
+static char *tfa987x_irq_info[] = {
+	"Power on reset",
+	"Overcurrent booster",
+	"Overtemperature",
+	"Overcurrent amp",
+	"Undervoltage",
+	"Hw mgr alarm",
+	"TDM error",
+	"Lost clock",
+	"Brown out VDDD"};
+
+TFA9878_IRQ_NAMETABLE;
+/*
+ * initialize interrupt registers
+ */
+void tfa_irq_init(struct tfa_device *tfa)
+{
+	unsigned short irqmask = tfa->interrupt_enable[0];
+
+	/* disable interrupts */
+	tfa_reg_write(tfa, TFA98XX_INTERRUPT_ENABLE_REG1, 0); /* clear enables */
+	/* clear all active interrupts */
+	tfa_reg_write(tfa, TFA98XX_INTERRUPT_IN_REG1, 0xffff); /* clear active */
+	/* enable interrupts */
+	tfa_reg_write(tfa, TFA98XX_INTERRUPT_ENABLE_REG1, irqmask); /* set enables */	
+
+}
+
+/*
+ * report interrupt status
+ */
+int tfa_irq_report(struct tfa_device *tfa)
+{
+	unsigned short irqmask, irqstatus, activemask;
+	int irq, irq_max, rc;
+	char **irq_info;
+	tfaIrqName_t *irq_names;
+
+	if ( tfa->dev_ops.get_mtpb ) /* new types do not have mtp */
+	{
+		irq_max = ARRAY_SIZE(tfa987x_irq_info);
+		irq_names = Tfa9878IrqNames;
+		irq_info = tfa987x_irq_info;
+	} 
+	else
+	{
+		irq_max = ARRAY_SIZE(tfa986x_irq_info);
+		irq_names = tfa986x_irq_names;
+		irq_info = tfa986x_irq_info;
+	}
+
+	/* get status bits */
+	rc = tfa_reg_read(tfa, TFA98XX_INTERRUPT_OUT_REG1, &irqstatus); /* INTERRUPT STATUSREG */
+	if (rc < 0)
+		return -rc;
+
+	irqmask = tfa->interrupt_enable[0];
+	activemask = irqmask & irqstatus;
+
+	for (irq = 0; irq < irq_max; irq++)
+	{
+		if (activemask & (1 << irq))
+			pr_err("device[%d] interrupt: %s %s\n", 
+				tfa->dev_idx, irq_names[irq].irqName, irq_info[irq]);
+	}
+
+	/* mask all to clear INT pin */
+	tfa_reg_write(tfa, TFA98XX_INTERRUPT_ENABLE_REG1, 0); 
+
+	/* clear active irqs */
+	tfa_reg_write(tfa, TFA98XX_INTERRUPT_IN_REG1, activemask);
+
+	/* unmask */
+	/* the unmask called after this return takes tfa->interrupt_enable[] */
+
+	return 0;	
 }
 
 /*
@@ -4139,7 +4246,7 @@ enum Tfa98xx_Error tfa_status(struct tfa_device *tfa)
 {
 	int value;
 	uint16_t val;
-    
+    pr_info();
 	if (tfa->dev_ops.tfa_status != NULL)
 		return(tfa->dev_ops.tfa_status(tfa));
 	/*
@@ -4176,7 +4283,7 @@ enum Tfa98xx_Error tfa_status(struct tfa_device *tfa)
 		!TFA_GET_BF_VALUE(tfa, PLLS, val) ||
 		(!(tfa->daimap & Tfa98xx_DAI_TDM) &&
 			!TFA_GET_BF_VALUE(tfa, VDDS, val)))
-		pr_err("Misc errors detected: STATUS_FLAG0 = 0x%x\n", val);
+		pr_err("Misc errors detected: STATUS_FLAG0 = 0x%x\n", val);	
 
 	if ((tfa->daimap & Tfa98xx_DAI_TDM) && (tfa->tfa_family == 2)) {
 		value = TFA_READ_REG(tfa, TDMERR); /* STATUS_FLAGS1 */
@@ -4190,7 +4297,6 @@ enum Tfa98xx_Error tfa_status(struct tfa_device *tfa)
 
 	return Tfa98xx_Error_Ok;
 }
-
 
 int tfa_wait4manstate(struct tfa_device *tfa, uint16_t bf, uint16_t wait_value, int loop)
 {

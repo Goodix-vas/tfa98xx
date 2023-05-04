@@ -751,7 +751,8 @@ static enum Tfa98xx_Error tfa9873_specific(struct tfa_device* tfa)
 {
 	enum Tfa98xx_Error error = Tfa98xx_Error_Ok;
 	unsigned short value, xor;
-
+	unsigned short irqmask;
+	
 	if (tfa->in_use == 0)
 		return Tfa98xx_Error_NotOpen;
 
@@ -808,6 +809,18 @@ static enum Tfa98xx_Error tfa9873_specific(struct tfa_device* tfa)
 		pr_info("\nWarning: Optimal settings not found for device with revid = 0x%x \n", tfa->rev);
 		break;
 	}
+
+	/* select error interrupts */
+	irqmask = (TFA_BF_MSK(TFA9878_BF_IEBSTOC) |
+				TFA_BF_MSK(TFA9878_BF_IEOTDS) |
+				TFA_BF_MSK(TFA9878_BF_IEOCPR) |
+				TFA_BF_MSK(TFA9878_BF_IEUVDS) |
+				TFA_BF_MSK(TFA9878_BF_IEBODNOK));
+
+	tfa->interrupt_enable[0] = irqmask; /* save mask */
+	/* init irq regs */
+	tfa_irq_init(tfa);
+
 	error = tfa_set_bf_volatile(tfa, TFA9873_BF_FSSYNCEN, 0);
 	pr_info("info : disabled FS synchronisation! \n");
 	return error;
@@ -845,6 +858,7 @@ static enum Tfa98xx_Error tfa9874_specific(struct tfa_device *tfa)
 {
 	enum Tfa98xx_Error error = Tfa98xx_Error_Ok;
 	unsigned short value, xor;
+	unsigned short irqmask;
 
 	if (tfa->in_use == 0)
 		return Tfa98xx_Error_NotOpen;
@@ -921,6 +935,17 @@ static enum Tfa98xx_Error tfa9874_specific(struct tfa_device *tfa)
 		pr_info("\nWarning: Optimal settings not found for device with revid = 0x%x \n", tfa->rev);
 		break;
 	}
+
+	/* select error interrupts */
+	irqmask = (TFA_BF_MSK(TFA9878_BF_IEBSTOC) |
+				TFA_BF_MSK(TFA9878_BF_IEOTDS) |
+				TFA_BF_MSK(TFA9878_BF_IEOCPR) |
+				TFA_BF_MSK(TFA9878_BF_IEUVDS) |
+				TFA_BF_MSK(TFA9878_BF_IEBODNOK));
+
+	tfa->interrupt_enable[0] = irqmask; /* save mask */
+	/* init irq regs */
+	tfa_irq_init(tfa);
 
 	return error;
 }
@@ -1209,6 +1234,7 @@ static enum Tfa98xx_Error tfa9865_specific(struct tfa_device *tfa)
 {
 	enum Tfa98xx_Error error = Tfa98xx_Error_Ok;
 	unsigned short value, xor, rc;
+	unsigned short irqmask;
 
 	if (tfa->in_use == 0)
 		return Tfa98xx_Error_NotOpen;
@@ -1264,7 +1290,7 @@ static enum Tfa98xx_Error tfa9865_specific(struct tfa_device *tfa)
 
 	case 0x0c65:/**TFA9865 N1C0 **/
 		/* ----- generated code start ----- */
-		/* -----  version 38 ----- */
+		/* -----  version 39 ----- */
 		tfa_reg_write(tfa, 0x02, 0x0628); //POR=0x0008
 		tfa_reg_write(tfa, 0x08, 0x01c2); //POR=0x01d2
 		tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
@@ -1313,6 +1339,21 @@ static enum Tfa98xx_Error tfa9865_specific(struct tfa_device *tfa)
 	/* we come from reset state so turn off osc */
 	tfa_set_bf(tfa, TFA9865_BF_MANAOOSC, 1);
 
+	/* select error interrupts */
+	irqmask = (TFA_BF_MSK(TFA9865_BF_IEBSTOC) |
+				TFA_BF_MSK(TFA9865_BF_IEOTDS) |
+				TFA_BF_MSK(TFA9865_BF_IEOCPR) |
+				TFA_BF_MSK(TFA9865_BF_IEUVDS) |
+				TFA_BF_MSK(TFA9865_BF_IEBODNOK)|
+				TFA_BF_MSK(TFA9865_BF_IECOOR)|
+				TFA_BF_MSK(TFA9865_BF_IEOVDS)|
+				TFA_BF_MSK(TFA9865_BF_IEQPFAIL));
+
+	tfa->interrupt_enable[0] = irqmask; /* save mask */
+	/* init irq regs */
+	tfa_irq_init(tfa);
+
+
 	return error;
 }
 
@@ -1322,49 +1363,6 @@ static int tfa9865_set_bitfield(struct tfa_device* tfa, uint16_t bitfield, uint1
 		return tfa_set_bf_volatile(tfa, (uint16_t)bitfield, value);
 	else
 		return tfa_set_bf(tfa, (uint16_t)bitfield, value);
-}
-enum Tfa98xx_Error tfa9865_tfa_status(struct tfa_device* tfa)
-{
-	int value;
-	uint16_t val;
-	value = tfa_read_reg(tfa, TFA9865_BF_VDDS); /* STATUSREG */
-	if (value < 0)
-		return -value;
-	val = (uint16_t)value;
-	if (!tfa_get_bf_value(TFA9865_BF_UVDS, val) ||
-		!tfa_get_bf_value(TFA9865_BF_OVDS, val) ||
-		!tfa_get_bf_value(TFA9865_BF_OTDS, val) ||
-		tfa_get_bf_value(TFA9865_BF_OCDS, val)  ||
-		tfa_get_bf_value(TFA9865_BF_NOCLK, val))
-		pr_err("Misc errors detected: STATUS_FLAG0 = 0x%x\n", val);
-
-	if (tfa_get_bf_value(TFA9865_BF_NOCLK, val))
-		tfa_set_bf_volatile(tfa, (uint16_t)TFA9865_BF_NOCLK, 1);
-	if (!tfa_get_bf_value(TFA9865_BF_UVDS, val))
-		tfa_set_bf_volatile(tfa, (uint16_t)TFA9865_BF_UVDS, 1);
-	if (!tfa_get_bf_value(TFA9865_BF_OVDS, val))
-		tfa_set_bf_volatile(tfa, (uint16_t)TFA9865_BF_OVDS, 1);
-	if (!tfa_get_bf_value(TFA9865_BF_OTDS, val))
-		tfa_set_bf_volatile(tfa, (uint16_t)TFA9865_BF_OTDS, 1);
-	if (tfa_get_bf_value(TFA9865_BF_OCDS, val))
-		tfa_set_bf_volatile(tfa, (uint16_t)TFA9865_BF_OCDS, 1);
-	/*
-	 * checking clocking stability.
-	 */
-	if (!tfa_get_bf(tfa, TFA9865_BF_CLKS))
-		pr_err("ERROR: CLKS is unstable\n");
-	if (!tfa_get_bf(tfa, TFA9865_BF_PLLS))
-		pr_err("ERROR: PLL not locked\n");
-	if (tfa_get_bf(tfa, TFA9865_BF_TDMERR) ||
-		tfa_get_bf(tfa, TFA9865_BF_TDMLUTER))
-		pr_err("TDM related errors: STATUS_FLAG1 = 0x%x\n", (uint16_t)tfa_read_reg(tfa, TFA9865_BF_TDMERR));
-	if (tfa_get_bf(tfa, TFA9865_BF_BODNOK))
-	{
-		pr_err("BODNOK error detected : STATUS_FLAG3 = 0x%x\n", (uint16_t)tfa_read_reg(tfa, TFA9865_BF_BODNOK));
-		tfa_set_bf_volatile(tfa, (uint16_t)TFA9865_BF_BODNOK, 1);
-	}
-
-	return Tfa98xx_Error_Ok;
 }
 
 static int tfa9865_set_swprofile(struct tfa_device *tfa, unsigned short new_value)
@@ -1420,6 +1418,7 @@ void tfa9865_ops(struct tfa_device_ops *ops)
 	/* Set defaults for ops */
 	tfa_set_ops_defaults(ops);
 
+	ops->get_mtpb = NULL; /* no mtp, used as check for new efuse types */
 	ops->tfa_init = tfa9865_specific;
 	ops->set_swprof = tfa9865_set_swprofile;
 	ops->get_swprof = tfa9865_get_swprofile;
@@ -1428,7 +1427,6 @@ void tfa9865_ops(struct tfa_device_ops *ops)
 	ops->dsp_system_stable = tfa9865_dsp_system_stable;
 	ops->set_mute = tfa_set_mute_nodsp;
 	ops->tfa_set_bitfield = tfa9865_set_bitfield;
-	ops->tfa_status = tfa9865_tfa_status;
 }
 
 /***********************************************************************************/
@@ -1447,6 +1445,7 @@ static enum Tfa98xx_Error tfa9878_specific(struct tfa_device *tfa)
 {
 	enum Tfa98xx_Error error = Tfa98xx_Error_Ok;
 	unsigned short value, xor;
+	unsigned short irqmask;
 
 	if (tfa->in_use == 0)
 		return Tfa98xx_Error_NotOpen;
@@ -1499,6 +1498,17 @@ static enum Tfa98xx_Error tfa9878_specific(struct tfa_device *tfa)
 		pr_info("\nWarning: Optimal settings not found for device with revid = 0x%x \n", tfa->rev);
 		break;
 	}
+
+	/* select error interrupts */
+	irqmask = (TFA_BF_MSK(TFA9878_BF_IEBSTOC) |
+				TFA_BF_MSK(TFA9878_BF_IEOTDS) |
+				TFA_BF_MSK(TFA9878_BF_IEOCPR) |
+				TFA_BF_MSK(TFA9878_BF_IEUVDS) |
+				TFA_BF_MSK(TFA9878_BF_IEBODNOK));
+
+	tfa->interrupt_enable[0] = irqmask; /* save mask */
+	/* init irq regs */
+	tfa_irq_init(tfa);
 
 	return error;
 }

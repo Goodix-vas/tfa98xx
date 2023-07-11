@@ -1306,7 +1306,8 @@ static enum Tfa98xx_Error tfa9865_specific(struct tfa_device *tfa)
 
 	case 0x3c65:/**TFA9865 N1C3 **/		
 		/* ----- generated code start(V6) ----- */
-		/* -----  version 6 ----- */
+		/* -----  version 10 ----- */
+		tfa_reg_write(tfa, 0x00, 0xc041); //POR=0xc241
 		tfa_reg_write(tfa, 0x02, 0x0628); //POR=0x0008
 		tfa_reg_write(tfa, 0x08, 0x01c2); //POR=0x01d2
 		tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
@@ -1314,6 +1315,27 @@ static enum Tfa98xx_Error tfa9865_specific(struct tfa_device *tfa)
 		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
 		tfa_reg_write(tfa, 0x5c, 0x302b); //POR=0x5e96
 		tfa_reg_write(tfa, 0x62, 0x0580); //POR=0x0582
+		tfa_reg_write(tfa, 0x63, 0x0194); //POR=0x0182
+		tfa_reg_write(tfa, 0x68, 0x0820); //POR=0x0c20
+		tfa_reg_write(tfa, 0x74, 0x61a0); //POR=0x50f0
+		tfa_reg_write(tfa, 0x75, 0x9a00); //POR=0x9200
+		tfa_reg_write(tfa, 0x78, 0x0001); //POR=0x000d
+		tfa_reg_write(tfa, 0xd7, 0x0001); //POR=0x0000
+		tfa_reg_write(tfa, 0xdd, 0x0006); //POR=0x005e
+		/* ----- generated code end   ----- */
+		break;
+		
+	case 0x4c65:/**TFA9865 N1C3 **/
+		/* ----- generated code start(V6) ----- */
+		/* -----  version 9 ----- */
+		tfa_reg_write(tfa, 0x00, 0x8041); //POR=0x8241
+		tfa_reg_write(tfa, 0x02, 0x0628); //POR=0x0008
+		tfa_reg_write(tfa, 0x08, 0x01c2); //POR=0x01d2
+		tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
+		tfa_reg_write(tfa, 0x5a, 0x5f5e); //POR=0x36be
+		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
+		tfa_reg_write(tfa, 0x5c, 0x302b); //POR=0x5e96
+		tfa_reg_write(tfa, 0x62, 0x05c6); //POR=0x0582
 		tfa_reg_write(tfa, 0x63, 0x0194); //POR=0x0182
 		tfa_reg_write(tfa, 0x68, 0x0820); //POR=0x0c20
 		tfa_reg_write(tfa, 0x74, 0x61a0); //POR=0x50f0

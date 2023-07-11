@@ -7,7 +7,7 @@
 #define _TFA9865_TFAFIELDNAMES_H
 
 
-#define TFA9865_I2CVERSION    6
+#define TFA9865_I2CVERSION    9
 
 typedef enum tfa9865BfEnumList {
     TFA9865_BF_PWDN  = 0x0000,    /*!< Powerdown selection                                */
@@ -176,6 +176,7 @@ typedef enum tfa9865BfEnumList {
     TFA9865_BF_TDMSRCCS= 0x6902,    /*!< Sensed value C                                     */
     TFA9865_BF_TDMSRCDS= 0x6932,    /*!< Sensed value D                                     */
     TFA9865_BF_TDMSRCES= 0x6962,    /*!< Sensed value E                                     */
+    TFA9865_BF_FLGBSS= 0x6d00,    /*!< BSS flag                                           */
     TFA9865_BF_IPMS  = 0x6e00,    /*!< Idle power mode                                    */
     TFA9865_BF_LVLCLPPWM= 0x6f72,    /*!< clip detect threshold control                      */
     TFA9865_BF_DCIE  = 0x7060,    /*!< Adaptive boost mode                                */
@@ -191,9 +192,9 @@ typedef enum tfa9865BfEnumList {
     TFA9865_BF_EFUSEK= 0xa107,    /*!< EFUSE KEY2 register                                */
     TFA9865_BF_KEY1LOCKED= 0xa200,    /*!< Indicates KEY1 is locked                           */
     TFA9865_BF_KEY2LOCKED= 0xa210,    /*!< Indicates KEY2 is locked                           */
-    TFA9865_BF_PLLPDIV= 0xc934,    /*!< PLL PDIV when  use_direct_pll_ctrl set to 1        */
-    TFA9865_BF_PLLNDIV= 0xc987,    /*!< PLL NDIV when  use_direct_pll_ctrl set to 1        */
-    TFA9865_BF_PLLMDIV= 0xca0f,    /*!< PLL MDIV in PLL when  use_direct_pll_ctrl set to 1 */
+    TFA9865_BF_PLLPDIV= 0xc934,    /*!< PLL PDIV when pll_use_direct_ctrls set to 1        */
+    TFA9865_BF_PLLNDIV= 0xc987,    /*!< PLL NDIV when pll_use_direct_ctrls set to 1        */
+    TFA9865_BF_PLLMDIV= 0xca0f,    /*!< PLL MDIV in PLL when pll_use_direct_ctrls set to 1 */
     TFA9865_BF_PLLSTRTM= 0xce42,    /*!< PLL startup time selection control                 */
     TFA9865_BF_DCDIS = 0xd190,    /*!< DCDC on/off                                        */
     TFA9865_BF_DCFBGAIN= 0xdd11,    /*!< Gain selection for feedback signal                 */
@@ -368,6 +369,7 @@ typedef enum tfa9865BfEnumList {
    { 0x6902, "TDMSRCCS"},    /* Sensed value C                                    , */\
    { 0x6932, "TDMSRCDS"},    /* Sensed value D                                    , */\
    { 0x6962, "TDMSRCES"},    /* Sensed value E                                    , */\
+   { 0x6d00, "FLGBSS"},    /* BSS flag                                          , */\
    { 0x6e00, "IPMS"},    /* Idle power mode                                   , */\
    { 0x6f72, "LVLCLPPWM"},    /* clip detect threshold control                     , */\
    { 0x7060, "DCIE"},    /* Adaptive boost mode                               , */\
@@ -383,9 +385,9 @@ typedef enum tfa9865BfEnumList {
    { 0xa107, "EFUSEK"},    /* EFUSE KEY2 register                               , */\
    { 0xa200, "KEY1LOCKED"},    /* Indicates KEY1 is locked                          , */\
    { 0xa210, "KEY2LOCKED"},    /* Indicates KEY2 is locked                          , */\
-   { 0xc934, "PLLPDIV"},    /* PLL PDIV when  use_direct_pll_ctrl set to 1       , */\
-   { 0xc987, "PLLNDIV"},    /* PLL NDIV when  use_direct_pll_ctrl set to 1       , */\
-   { 0xca0f, "PLLMDIV"},    /* PLL MDIV in PLL when  use_direct_pll_ctrl set to 1, */\
+   { 0xc934, "PLLPDIV"},    /* PLL PDIV when pll_use_direct_ctrls set to 1       , */\
+   { 0xc987, "PLLNDIV"},    /* PLL NDIV when pll_use_direct_ctrls set to 1       , */\
+   { 0xca0f, "PLLMDIV"},    /* PLL MDIV in PLL when pll_use_direct_ctrls set to 1, */\
    { 0xce42, "PLLSTRTM"},    /* PLL startup time selection control                , */\
    { 0xd190, "DCDIS"},    /* DCDC on/off                                       , */\
    { 0xdd11, "DCFBGAIN"},    /* Gain selection for feedback signal                , */\
@@ -546,7 +548,7 @@ typedef enum tfa9865BfEnumList {
    { 0x5257, "gain"},    /* Amplifier gain                                    , */\
    { 0x52f0, "bypass_dly_line"},    /* Bypass the interpolator delay line                , */\
    { 0x5300, "bypass_lp_temp"},    /* Bypass the low pass filter inside temperature sensor, */\
-   { 0x5452, "amp_drive"},    /* others : drive setting of AMP powerstage          , */\
+   { 0x5452, "amp_drive"},    /* Drive setting of AMP powerstage when amp_use_direct_ctrls is set to 1, */\
    { 0x5810, "hard_mute"},    /* Hard mute - PWM                                   , */\
    { 0x5823, "disable_dpwm_outputs"},    /* Disable dPwm outputs                              , */\
    { 0x5860, "disable_cmff"},    /* Disable cmff                                      , */\
@@ -599,12 +601,14 @@ typedef enum tfa9865BfEnumList {
    { 0x6962, "tdm_sourcee_frame_sel"},    /* Sensed value E                                    , */\
    { 0x6b00, "disable_auto_engage"},    /* Disable auto engage                               , */\
    { 0x6b10, "disable_engage"},    /* Disable engage                                    , */\
-   { 0x6c69, "spare_out"},    /* Spare control bits for future use                 , */\
-   { 0x6d09, "spare_in"},    /* Spare control bit - read only                     , */\
+   { 0x6c60, "enbl_dpsa_qpump_ok"},    /* enable dpsa qpump ok                              , */\
+   { 0x6c78, "spare_out"},    /* Spare control bits for future use                 , */\
+   { 0x6d00, "flag_bss"},    /* BSS flag                                          , */\
+   { 0x6d18, "spare_in"},    /* Spare control bit - read only                     , */\
    { 0x6e00, "flag_idle_power_mode"},    /* Idle power mode                                   , */\
    { 0x6f72, "pwm_clip_lvl"},    /* clip detect threshold control                     , */\
    { 0x7060, "boost_intel"},    /* Adaptive boost mode                               , */\
-   { 0x7103, "bst_drive"},    /* drive setting of BST powerstage                   , */\
+   { 0x7103, "bst_drive"},    /* Drive setting of Booster powerstage               , */\
    { 0x7400, "dcdc_disable_ns"},    /* Disable control of noise shaper in DCDC control   , */\
    { 0x7410, "dcdc_disable_mod8bit"},    /* Disable control of reset of noise shaper when 8 bit value for dcdc control occurs, */\
    { 0x7444, "boost_trip_lvl_1st"},    /* 1st Adaptive boost trip level, effective only when DCIE is set to 1, */\
@@ -646,20 +650,20 @@ typedef enum tfa9865BfEnumList {
    { 0xb060, "bypass_lost_clk"},    /* Bypass lost clock detector                        , */\
    { 0xb070, "ctrl_vpalarm"},    /* vpalarm (uvp ovp handling)                        , */\
    { 0xb087, "ocp_threshold"},    /* OCP threshold level                               , */\
-   { 0xc000, "rgu_use_direct_ctrls"},    /* Direct control to overrule several functions for testing, */\
+   { 0xc000, "rgu_use_direct_ctrls"},    /* Use Direct control for datapath and cgu reset     , */\
    { 0xc010, "rst_datapath"},    /* Direct control for datapath reset                 , */\
    { 0xc020, "rst_cgu"},    /* Direct control for cgu reset                      , */\
-   { 0xc030, "fro_use_direct_ctrls"},    /* Direct control to overrule several functions for testing, */\
-   { 0xc040, "pll_use_direct_ctrls"},    /* Direct control to overrule several functions for testing, */\
-   { 0xc050, "amp_use_direct_ctrls"},    /* Direct control to overrule several functions for testing, */\
-   { 0xc060, "bst_use_direct_ctrls"},    /* Direct control to overrule several functions for testing, */\
-   { 0xc070, "cvs_use_direct_ctrls"},    /* Direct control to overrule several functions for testing, */\
-   { 0xc080, "adc11_use_direct_ctrls"},    /* Direct control to overrule several functions for testing, */\
-   { 0xc090, "ref_use_direct_ctrls"},    /* Direct control to overrule several functions for testing, */\
-   { 0xc0a0, "atb_use_direct_ctrls"},    /* Direct control to overrule several functions for testing, */\
-   { 0xc0b0, "qpump_use_direct_ctrls"},    /* Direct control to overrule several functions for testing (for qpump dynamic control only), */\
+   { 0xc030, "fro_use_direct_ctrls"},    /* Use Direct control for fro oscillator             , */\
+   { 0xc040, "pll_use_direct_ctrls"},    /* Use Direct control for PLL                        , */\
+   { 0xc050, "amp_use_direct_ctrls"},    /* Use Direct control for amplifier                  , */\
+   { 0xc060, "bst_use_direct_ctrls"},    /* Use Direct control for booster                    , */\
+   { 0xc070, "cvs_use_direct_ctrls"},    /* Use Direct control for voltage and current sense  , */\
+   { 0xc080, "adc11_use_direct_ctrls"},    /* Direct control for monitoring adc                 , */\
+   { 0xc090, "ref_use_direct_ctrls"},    /* Direct control for references                     , */\
+   { 0xc0a0, "atb_use_direct_ctrls"},    /* Direct control for analog test bus                , */\
+   { 0xc0b0, "qpump_use_direct_ctrls"},    /* Direct control for charge pump                    , */\
    { 0xc0d0, "enbl_ringo"},    /* Enable the ring oscillator for test purpose       , */\
-   { 0xc0e0, "enbl_fro"},    /* Enables FRO8M in I2C direct control mode only     , */\
+   { 0xc0e0, "enbl_fro"},    /* Enables FRO8M when fro_use_direct_ctrls set to 1  , */\
    { 0xc0f0, "atb_trigger"},    /* Trigger ATB controller, auto-clear                , */\
    { 0xc100, "clk_8m_sel"},    /* Select clk_8m(used for manger efuse_ctrl atb_ctrl) source (for testing), */\
    { 0xc110, "clk_efuse_sel"},    /* Select clk_efuse source((for programming to choose an extranl clock), */\
@@ -685,23 +689,23 @@ typedef enum tfa9865BfEnumList {
    { 0xc6a0, "datao_out"},    /* DATAO output value, only effective in GPIO mode   , */\
    { 0xc6b0, "datao_ie"},    /* DATAO input control, only effective in GPIO mode  , */\
    { 0xc6c1, "datao_ds"},    /* DATAO pad output drive strength                   , */\
-   { 0xc700, "enbl_pll"},    /* Enables PLL when  use_direct_pll_ctrl set to 1    , */\
-   { 0xc712, "pll_dpll_clkref_div"},    /* DPLL prescaller  reference clock divider  when  use_direct_pll_ctrl set to 1, */\
-   { 0xc741, "pll_dpll_clkvco_div"},    /* DPLL VCO clock divider  when  use_direct_pll_ctrl set to 1, */\
-   { 0xc762, "pll_cp_ichg_sel"},    /* PLL charge pump output current  when  use_direct_pll_ctrl set to 1, */\
-   { 0xc792, "pll_vco_gm_sel"},    /* PLL VCO gain value when  use_direct_pll_ctrl set to 1, */\
-   { 0xc7c2, "pll_lf_c0_sel"},    /* Loop filter capacitance C0 when  use_direct_pll_ctrl set to 1, */\
+   { 0xc700, "enbl_pll"},    /* Enables PLL when pll_use_direct_ctrls set to 1    , */\
+   { 0xc712, "pll_dpll_clkref_div"},    /* DPLL prescaller  reference clock divider  when pll_use_direct_ctrls set to 1, */\
+   { 0xc741, "pll_dpll_clkvco_div"},    /* DPLL VCO clock divider  when pll_use_direct_ctrls set to 1, */\
+   { 0xc762, "pll_cp_ichg_sel"},    /* PLL charge pump output current  when pll_use_direct_ctrls set to 1, */\
+   { 0xc792, "pll_vco_gm_sel"},    /* PLL VCO gain value when pll_use_direct_ctrls set to 1, */\
+   { 0xc7c2, "pll_lf_c0_sel"},    /* Loop filter capacitance C0 when pll_use_direct_ctrls set to 1, */\
    { 0xc7f0, "pll_dpll_itrim_bypass"},    /* Bypass the DPLL auto trimming and use pll_dpll_itrim_manual instead, */\
-   { 0xc801, "pll_lf_c1_sel"},    /* loop filter capacitance C1  when  use_direct_pll_ctrl set to 1, */\
-   { 0xc821, "pll_lf_c2_sel"},    /* loop filter capacitance C2  when  use_direct_pll_ctrl set to 1, */\
-   { 0xc842, "pll_lf_r0_sel"},    /* loop filter resistance R0  when  use_direct_pll_ctrl set to 1, */\
-   { 0xc872, "pll_lf_r2_sel"},    /* loop filter resistance R2  when  use_direct_pll_ctrl set to 1, */\
+   { 0xc801, "pll_lf_c1_sel"},    /* loop filter capacitance C1  when pll_use_direct_ctrls set to 1, */\
+   { 0xc821, "pll_lf_c2_sel"},    /* loop filter capacitance C2  when pll_use_direct_ctrls set to 1, */\
+   { 0xc842, "pll_lf_r0_sel"},    /* loop filter resistance R0  when pll_use_direct_ctrls set to 1, */\
+   { 0xc872, "pll_lf_r2_sel"},    /* loop filter resistance R2  when pll_use_direct_ctrls set to 1, */\
    { 0xc900, "pll_lf_ord4_sel"},    /* PLL Filter order selection                        , */\
-   { 0xc934, "pll_pdiv"},    /* PLL PDIV when  use_direct_pll_ctrl set to 1       , */\
-   { 0xc987, "pll_ndiv"},    /* PLL NDIV when  use_direct_pll_ctrl set to 1       , */\
-   { 0xca0f, "pll_mdiv"},    /* PLL MDIV in PLL when  use_direct_pll_ctrl set to 1, */\
-   { 0xcb00, "pll_cp_en"},    /* PLL charge pump enable  when  use_direct_pll_ctrl set to 1, */\
-   { 0xcb10, "pll_vco_en"},    /* PLL VCO enable  when  use_direct_pll_ctrl set to 1, */\
+   { 0xc934, "pll_pdiv"},    /* PLL PDIV when pll_use_direct_ctrls set to 1       , */\
+   { 0xc987, "pll_ndiv"},    /* PLL NDIV when pll_use_direct_ctrls set to 1       , */\
+   { 0xca0f, "pll_mdiv"},    /* PLL MDIV in PLL when pll_use_direct_ctrls set to 1, */\
+   { 0xcb00, "pll_cp_en"},    /* PLL charge pump enable  when pll_use_direct_ctrls set to 1, */\
+   { 0xcb10, "pll_vco_en"},    /* PLL VCO enable  when pll_use_direct_ctrls set to 1, */\
    { 0xcb20, "pll_clkout_en"},    /* PLL final clock gate enable                       , */\
    { 0xcb30, "pll_digital_test_en"},    /* PLL digital testing enable                        , */\
    { 0xcb40, "pll_analog_test_en"},    /* PLL analog testing buffer enable                  , */\
@@ -715,10 +719,10 @@ typedef enum tfa9865BfEnumList {
    { 0xcd87, "ana_spare_key1"},    /* reseved for analog metal ECO                      , */\
    { 0xce42, "sel_pll_startup_time"},    /* PLL startup time selection control                , */\
    { 0xce87, "ana_spare_key2"},    /* reseved for analog metal ECO                      , */\
-   { 0xcf02, "adc11b_td_t"},    /* Adc setup time                                    , */\
-   { 0xcf31, "adc11b_chn_sel"},    /* Select the input to convert for ADC11 - I2C direct control mode, */\
+   { 0xcf02, "adc11b_td_t"},    /* ADC setup time                                    , */\
+   { 0xcf31, "adc11b_chn_sel"},    /* Select the input to convert for ADC11 when adc11_use_direct_ctrls  is set to 1, */\
    { 0xcf64, "adc11b_prog_sample"},    /* ADC11 program sample setting                      , */\
-   { 0xcfb0, "adc11b_en"},    /* Enable ADC10 - I2C direct control mode            , */\
+   { 0xcfb0, "adc11b_en"},    /* Enable ADC11 when adc11_use_direct_ctrls  is set to 1, */\
    { 0xcfc0, "bypass_lp_vbat"},    /* Bypass control for Low pass filter in batt sensor , */\
    { 0xcfd0, "bypass_lp_vddp"},    /* Bypass control for Low pass filter in vddp sensor , */\
    { 0xd00a, "data_adc11b"},    /* ADC 11 data output data for testing               , */\
@@ -731,10 +735,10 @@ typedef enum tfa9865BfEnumList {
    { 0xd2c3, "test_spare_out2"},    /* Test spare out 2                                  , */\
    { 0xd300, "atb_reset"},    /* Analog Test Bus reset when atb_use_direct_ctrls  is set to 1, */\
    { 0xd312, "bst_fmin"},    /* Booster minimum frequency when bst_use_direct_ctrls is set to 1, */\
-   { 0xd400, "amp_enbl"},    /* Amplifier enable  when amp_use_directly_ctrls is set to 1, */\
-   { 0xd410, "bst_enbl"},    /* Booster enable when bst_use_directly_ctrls is set to 1, */\
-   { 0xd427, "bst_vset"},    /* Bosster voltage bst_use_directly_ctrls is set to 1, */\
-   { 0xd4a3, "bst_ocp"},    /* Control da_bst_ocp when bst_use_directly_ctrls is set to 1, */\
+   { 0xd400, "amp_enbl"},    /* Amplifier enable  when amp_use_direct_ctrls is set to 1, */\
+   { 0xd410, "bst_enbl"},    /* Booster enable when bst_use_direct_ctrls is set to 1, */\
+   { 0xd427, "bst_vset"},    /* Bosster voltage bst_use_direct_ctrls is set to 1  , */\
+   { 0xd4a3, "bst_ocp"},    /* Control da_bst_ocp when bst_use_direct_ctrls is set to 1, */\
    { 0xd500, "cvs_cs_itf_pu"},    /* Current sense interface power up when cvs_use_direct_ctrls is set to 1, */\
    { 0xd510, "cvs_cs_sdm_pu"},    /* Current sense ADC power up when cvs_use_direct_ctrls is set to 1, */\
    { 0xd520, "cvs_vs_itf_pu"},    /* Voltage sense interface power up  when cvs_use_direct_ctrls is set to 1, */\
@@ -768,7 +772,7 @@ typedef enum tfa9865BfEnumList {
    { 0xd7c0, "amp_test_enable_clp"},    /* debug signal ALF, enable clipping of tzdac input currents in case of PST clip, */\
    { 0xd7d0, "amp_test_dis_occlip"},    /* debug signal ALF, disable clipping of tzdac input currents in case of overcurrent, */\
    { 0xd800, "bst_bias_pu"},    /* power up biasing of controller and reference voltage generation when bst_use_direct_ctrls is set to 1, */\
-   { 0xd810, "qpump_pu"},    /* power up biasing of charge pump bst_use_direct_ctrls is set to 1, */\
+   { 0xd810, "qpump_pu"},    /* power up biasing of charge pump qpump_use_direct_ctrls is set to 1, */\
    { 0xd820, "bst_timer_pu"},    /* power up biasing of timer in COT controller bst_use_direct_ctrls is set to 1, */\
    { 0xd830, "bst_fbck_pu"},    /* power up biasing of feedback DAC in COT controller bst_use_direct_ctrls is set to 1, */\
    { 0xd840, "bst_pst_pu"},    /* power up biasing of BST powerstage bst_use_direct_ctrls is set to 1, */\

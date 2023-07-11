@@ -558,7 +558,7 @@ static ssize_t tfa98xx_dbgfs_dieid_read(struct file *file,
 	struct i2c_client *i2c = file->private_data;
 	struct tfa98xx *tfa98xx = i2c_get_clientdata(i2c);
 	unsigned int readingreg[5];
-	char dieid_string[22];
+	char dieid_string[26];
 	mutex_lock(&tfa98xx->dsp_lock);
 	for (i = 0xFA; i <= 0xFE; i++)
 	{
@@ -576,7 +576,7 @@ static ssize_t tfa98xx_dbgfs_dieid_read(struct file *file,
         snprintf(dieid_string + i * 4, 5, "%04x",readingreg[i]);	
         i++;
     }
-	snprintf(dieid_string + 20,2,"\n");
+	snprintf(dieid_string + 20,6,"%02x%02x\n", i2c->adapter->nr, i2c->addr);
 	mutex_unlock(&tfa98xx->dsp_lock);
 	dev_dbg(&i2c->dev, "%s: DIEIDString : %s\n", __func__,dieid_string);
 

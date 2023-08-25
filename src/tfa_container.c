@@ -820,10 +820,19 @@ static TfaDescPtr_t *tfa_cnt_get_dsc(TfaContainer_t *cnt, TfaDescriptorType_t ty
 int tfa_cnt_get_devid(TfaContainer_t *cnt, int dev_idx)
 {
 	TfaPatch_t *patchfile;
-	TfaDescPtr_t *patchdsc;
+	TfaDescPtr_t *patchdsc, *reviddsc;
 	uint8_t *patchheader;
-	unsigned short devid, checkaddress;
-	int checkvalue;
+	unsigned short checkaddress;
+	int checkvalue, devid;
+
+	reviddsc = tfa_cnt_get_dsc(cnt, dscRevid, dev_idx);
+	if ( reviddsc) /* get the revid from cnt */
+	{
+		devid = reviddsc->offset; /* offset already point at payload */
+		return devid;
+	}
+
+	/* fall through to try the patch */
 
 	patchdsc = tfa_cnt_get_dsc(cnt, dscPatch, dev_idx);
 	if (!patchdsc) /* no patch for this device, assume non-i2c */

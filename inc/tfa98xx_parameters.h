@@ -604,6 +604,11 @@ typedef enum TfaDescriptorType {
 	dscCfMem,		// coolflux memory x,y,io
 	dscSetFwkUseCase,
 	dscSetVddpConfig,
+	dscReserved1,
+	dscReserved2,
+	dscReserved3,
+	dscReserved4,
+	dscRevid,
 	dsc_last		// trailer
 } TfaDescriptorType_t;
 

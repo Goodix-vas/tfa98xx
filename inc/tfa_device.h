@@ -115,7 +115,8 @@ struct tfa_device {
 	int dynamicTDMmode; /**tracking dynamic TDM setting from alsa input stream*/
 	int bitwidth;       /**bitwdith from alsa input stream*/
 	unsigned char slave_address; /**< I2C slave address (not shifted) */
-	unsigned short rev;     /**< full revid of this device */
+	int rev;     /**< full revid of this device */
+	int revid;     /**< sub variants of this device */
 	unsigned char tfa_family; /**< tfa1/tfa2 */
 	enum featureSupport supportDrc;
 	enum featureSupport supportFramework;

@@ -40,6 +40,7 @@
 #define MAX_BATT_LEVEL 670
 void tfanone_ops(struct tfa_device_ops *ops);
 void tfa9865_ops(struct tfa_device_ops *ops);
+void tfa986x_ops(struct tfa_device_ops *ops);
 void tfa9872_ops(struct tfa_device_ops *ops);
 void tfa9873_ops(struct tfa_device_ops *ops);
 void tfa9874_ops(struct tfa_device_ops *ops);
@@ -1258,15 +1259,20 @@ static enum Tfa98xx_Error
 tfa98xx_check_ic_rom_version(struct tfa_device *tfa, const unsigned char patchheader[])
 {
 	enum Tfa98xx_Error error = Tfa98xx_Error_Ok;
-	unsigned short checkrev, revid; 
+	unsigned short checkrev; 
 	unsigned char msb_revid, lsb_revid;
 	unsigned short checkaddress;
-	int checkvalue;
+	int checkvalue, revid, devid;
 	int value = 0;
 	int status;
 	lsb_revid = patchheader[0];
 	msb_revid = patchheader[5];
 	checkrev = tfa->rev & 0xff; /* only compare lower byte like 9865 : 0x65; 9875 : 0x75 */ 
+
+	devid = tfa_cnt_get_devid(tfa->cnt, tfa->dev_idx);
+	if ((devid == tfa->rev) || (devid == tfa->revid)) {
+		return error;
+	}
 
 	if ((lsb_revid != 0xFF) && (checkrev != lsb_revid))
 		return Tfa98xx_Error_Not_Supported;
@@ -1304,6 +1310,11 @@ tfa98xx_check_ic_rom_version(struct tfa_device *tfa, const unsigned char patchhe
 		if (checkvalue != 0xFFFFFF && checkvalue != 0) {
 			revid = (msb_revid << 8) | lsb_revid; /* full revid */
 			if (revid != tfa->rev) {
+				if (revid != tfa->revid) {
+					pr_err("container patch and HW mismatch: expected: 0x%02x, actual 0x%02x\n",
+						tfa->revid, revid);
+					return Tfa98xx_Error_Not_Supported;
+				}
 				pr_err("container patch and HW mismatch: expected: 0x%02x, actual 0x%02x\n",
 					tfa->rev, revid);
 				return Tfa98xx_Error_Not_Supported;

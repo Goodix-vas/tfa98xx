@@ -33,7 +33,7 @@ endif
 GIT_VERSION=$(shell cd $(PLMA_TFA_AUDIO_DRV_DIR); git describe --tags --dirty --match "v[0-9]*.[0-9]*.[0-9]*")
 EXTRA_CFLAGS += -DTFA98XX_GIT_VERSIONS=\"$(GIT_VERSION)\"
 
-EXTRA_CFLAGS += -I$(src)/inc
+EXTRA_CFLAGS += -I$(PLMA_TFA_AUDIO_DRV_DIR)/inc
 EXTRA_CFLAGS += -Werror
 
 obj-$(CONFIG_SND_SOC_TFA98XX) := snd-soc-tfa98xx.o

@@ -1,13 +1,13 @@
-/** Filename: tfa986x_tfaFieldnames.h
- *  This file was generated automatically on 06/30/23 at 19:34:07. 
- *  Source file: TFA986x_GPA2_N1A1_I2C_RegisterMap.xlsx
+/** Filename: tfa986x_tfafieldnames.h
+ *  This file was generated automatically on 02/14/24 at 10:52:36. 
+ *  Source file: TFA986x_GPA2_N1A3_I2C_RegisterMap.xlsx
  */
 
 #ifndef _TFA986X_TFAFIELDNAMES_H
 #define _TFA986X_TFAFIELDNAMES_H
 
 
-#define TFA986X_I2CVERSION    19
+#define TFA986X_I2CVERSION    5
 
 typedef enum tfa986xBfEnumList {
     TFA986X_BF_PWDN  = 0x0000,    /*!< Powerdown selection                                */
@@ -68,7 +68,6 @@ typedef enum tfa986xBfEnumList {
     TFA986X_BF_AMPS  = 0x11a0,    /*!< Amplifier enable                                   */
     TFA986X_BF_AREFS = 0x11b0,    /*!< References enable                                  */
     TFA986X_BF_CLIPS = 0x11c0,    /*!< Amplifier clipping                                 */
-    TFA986X_BF_LDMS  = 0x11d0,    /*!< Lowdrive mode                                      */
     TFA986X_BF_VGBS  = 0x11e0,    /*!< Vddp greater than vbat                             */
     TFA986X_BF_FLGBSS= 0x11f0,    /*!< BSS flag                                           */
     TFA986X_BF_MANSTATE= 0x1203,    /*!< Device manager status                              */
@@ -76,7 +75,7 @@ typedef enum tfa986xBfEnumList {
     TFA986X_BF_TDMSTAT= 0x1282,    /*!< TDM status bits                                    */
     TFA986X_BF_QPCLKSTS= 0x12b1,    /*!< QPUMP clock status                                 */
     TFA986X_BF_WAITSYNC= 0x12d0,    /*!< CGU and PLL synchronisation status flag from CGU   */
-    TFA986X_BF_NRPSSTS= 0x12e0,    /*!< Number of power stage sections                     */
+    TFA986X_BF_LDMS  = 0x12e0,    /*!< Flag in Low drive mode                             */
     TFA986X_BF_BODNOK= 0x1300,    /*!< BOD Flag VDD NOT OK (sticky flag,  clear on write a '1') */
     TFA986X_BF_QPFAIL= 0x1310,    /*!< QPUMP Fail Flag (sticky flag,  clear on write a '1') */
     TFA986X_BF_BATS  = 0x1509,    /*!< Battery voltage monitoring (V)                     */
@@ -274,7 +273,6 @@ typedef enum tfa986xBfEnumList {
    { 0x11a0, "AMPS"},    /* Amplifier enable                                  , */\
    { 0x11b0, "AREFS"},    /* References enable                                 , */\
    { 0x11c0, "CLIPS"},    /* Amplifier clipping                                , */\
-   { 0x11d0, "LDMS"},    /* Lowdrive mode                                     , */\
    { 0x11e0, "VGBS"},    /* Vddp greater than vbat                            , */\
    { 0x11f0, "FLGBSS"},    /* BSS flag                                          , */\
    { 0x1203, "MANSTATE"},    /* Device manager status                             , */\
@@ -282,7 +280,7 @@ typedef enum tfa986xBfEnumList {
    { 0x1282, "TDMSTAT"},    /* TDM status bits                                   , */\
    { 0x12b1, "QPCLKSTS"},    /* QPUMP clock status                                , */\
    { 0x12d0, "WAITSYNC"},    /* CGU and PLL synchronisation status flag from CGU  , */\
-   { 0x12e0, "NRPSSTS"},    /* Number of power stage sections                    , */\
+   { 0x12e0, "LDMS"},    /* Flag in Low drive mode                            , */\
    { 0x1300, "BODNOK"},    /* BOD Flag VDD NOT OK (sticky flag,  clear on write a '1'), */\
    { 0x1310, "QPFAIL"},    /* QPUMP Fail Flag (sticky flag,  clear on write a '1'), */\
    { 0x1509, "BATS"},    /* Battery voltage monitoring (V)                    , */\
@@ -486,7 +484,7 @@ typedef enum tfa986xBfEnumList {
    { 0x11a0, "flag_enbl_amp"},    /* Amplifier enable                                  , */\
    { 0x11b0, "flag_enbl_ref"},    /* References enable                                 , */\
    { 0x11c0, "flag_clip"},    /* Amplifier clipping                                , */\
-   { 0x11d0, "flag_low_drive_mode"},    /* Lowdrive mode                                     , */\
+   { 0x11d0, "flag_low_drive_mode"},    /* VBAT to VBST switch state                         , */\
    { 0x11e0, "flag_vddp_gt_vbat"},    /* Vddp greater than vbat                            , */\
    { 0x11f0, "flag_bss"},    /* BSS flag                                          , */\
    { 0x1203, "man_state"},    /* Device manager status                             , */\
@@ -494,7 +492,7 @@ typedef enum tfa986xBfEnumList {
    { 0x1282, "flag_tdm_status"},    /* TDM status bits                                   , */\
    { 0x12b1, "flag_qpump_clk_freq"},    /* QPUMP clock status                                , */\
    { 0x12d0, "flag_waiting_for_sync"},    /* CGU and PLL synchronisation status flag from CGU  , */\
-   { 0x12e0, "flag_active_pst_sections"},    /* Number of power stage sections                    , */\
+   { 0x12e0, "flag_active_pst_sections"},    /* Flag in Low drive mode                            , */\
    { 0x1300, "flag_bod_vddd_nok"},    /* BOD Flag VDD NOT OK (sticky flag,  clear on write a '1'), */\
    { 0x1310, "flag_qpump_fail"},    /* QPUMP Fail Flag (sticky flag,  clear on write a '1'), */\
    { 0x1509, "bat_adc"},    /* Battery voltage monitoring (V)                    , */\
@@ -645,7 +643,8 @@ typedef enum tfa986xBfEnumList {
    { 0x6962, "tdm_sourcee_frame_sel"},    /* Sensed value E                                    , */\
    { 0x6b00, "disable_auto_engage"},    /* Disable auto engage                               , */\
    { 0x6b10, "disable_engage"},    /* Disable engage                                    , */\
-   { 0x6c69, "spare_out"},    /* Spare control bits for future use                 , */\
+   { 0x6c60, "rst_bss_rst"},    /* delay bss reset                                   , */\
+   { 0x6c78, "spare_out"},    /* Spare control bits for future use                 , */\
    { 0x6d09, "spare_in"},    /* Spare control bit - read only                     , */\
    { 0x6e00, "flag_idle_power_mode"},    /* Idle power mode                                   , */\
    { 0x6f72, "pwm_clip_lvl"},    /* clip detect threshold control                     , */\
@@ -664,8 +663,8 @@ typedef enum tfa986xBfEnumList {
    { 0x7821, "bst_nomfreq"},    /* Values for Booster nominal frequency              , */\
    { 0x7900, "minion_test_disable"},    /* Testsignal MINION disable the minion even if the loop want to enable it, */\
    { 0x7910, "minion_test_ocd_force"},    /* Testsignal MINION  generate minion ocd flags      , */\
-   { 0x7920, "minion_test_vsensep"},    /* Testsignal MINION  observe OUTP signal on ATBP    , */\
-   { 0x7930, "minion_test_vsensen"},    /* Testsignal MINION  observe OUTN signal on ATBN    , */\
+   { 0x7920, "minion_test_vsensep"},    /* Testsignal MINION  observe the output of CMOS N-side internal signal on ATBP., */\
+   { 0x7930, "minion_test_vsensen"},    /* Testsignal MINION  observe the output of CMOS P-side internal signal on ATBP., */\
    { 0x7a00, "minion_ocd_disable"},    /* Disable the OCD functionality of the MINION       , */\
    { 0x7b02, "ns_hp2ln_criterion"},    /* Zeroes as threshold to swap from high power to low noise mode, */\
    { 0x7b32, "ns_ln2hp_criterion"},    /* Low power mode detector   ctrl cal_offset from gain module , */\

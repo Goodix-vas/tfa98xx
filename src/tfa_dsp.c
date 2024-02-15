@@ -92,7 +92,7 @@ int tfa_get_tap_pattern(struct tfa_device *tfa)
 int tfa_irq_clear(struct tfa_device *tfa, enum tfa9912_irq bit)
 {
 	unsigned char reg;
-
+	
 	/* make bitfield enum */
 	if (bit == tfa9912_irq_all) {
 		/* operate on all bits */
@@ -316,7 +316,7 @@ int tfa_irq_report(struct tfa_device *tfa)
 	for (irq = 0; irq < irq_max; irq++)
 	{
 		if (activemask & (1 << irq))
-			pr_err("device[%d] interrupt: %s %s\n", 
+			pr_err("device[%d] interrupt: %s %s\n",
 				tfa->dev_idx, irq_names[irq].irqName, irq_info[irq]);
 	}
 
@@ -376,15 +376,25 @@ void tfa_set_query_info(struct tfa_device *tfa)
 		tfa->bus = 1;
 		break;
 	case 0x65:
-       /* tfa9865 */
-       tfa->supportDrc = supportYes;
-       tfa->tfa_family = 2;
-       tfa->spkr_count = 1;
-       tfa->is_probus_device = 1;
-       tfa->advance_keys_handling = 1; /*artf65038*/
-       tfa->daimap = Tfa98xx_DAI_TDM;
-       tfa9865_ops(&tfa->dev_ops); /* register device operations */
-       break;
+		/* tfa9865 */
+		tfa->supportDrc = supportYes;
+		tfa->tfa_family = 2;
+		tfa->spkr_count = 1;
+		tfa->is_probus_device = 1;
+		tfa->advance_keys_handling = 1; /*artf65038*/
+		tfa->daimap = Tfa98xx_DAI_TDM;
+		tfa9865_ops(&tfa->dev_ops); /* register device operations */
+		break;
+	case 0x66:
+		/* tfa986x */
+		tfa->supportDrc = supportYes;
+		tfa->tfa_family = 2;
+		tfa->spkr_count = 1;
+		tfa->is_probus_device = 1;
+		tfa->advance_keys_handling = 1; /*artf65038*/
+		tfa->daimap = Tfa98xx_DAI_TDM;
+		tfa986x_ops(&tfa->dev_ops); /* register device operations */
+		break;
 	case 0x72:
 		/* tfa9872 */
 		tfa->supportDrc = supportYes;
@@ -593,8 +603,8 @@ enum Tfa98xx_DMEM tfa98xx_filter_mem(struct tfa_device *tfa, int filter_index, u
 		case 0x73:
 		case 0x74:
 		case 0x75:
-        case 0x78:
-        case 0x13:
+		case 0x78:
+		case 0x13:
 		default:
 			/* unsupported case, possibly intermediate version */
 			return -1;

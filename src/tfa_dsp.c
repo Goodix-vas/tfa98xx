@@ -3981,7 +3981,7 @@ enum Tfa98xx_Error tfa_dsp_partial_coefficients(struct tfa_device *tfa, uint8_t 
 /* fill context info */
 int tfa_dev_probe(int slave, struct tfa_device *tfa)
 {
-	uint16_t rev, reg_6, msb_rev;
+	uint16_t rev, reg_6, devrev;
 
 	tfa->slave_address = (unsigned char)slave;
 
@@ -3998,8 +3998,13 @@ int tfa_dev_probe(int slave, struct tfa_device *tfa)
 		PRINT("\nError: Unable to read revid from slave:0x%02x \n", slave);
 		return -1;
 		}
-		msb_rev = (reg_6 >> 8) +0x0a;
-		rev = msb_rev << 8 | (rev & 0xff);
+
+		devrev = (reg_6 & 0xff00) >> 8;
+
+		if ( (rev & 0xff) == 0x65 )
+			rev = (devrev + 0x0a) << 8 | (rev & 0xff);
+		else
+			rev = ((devrev & 0xf0) + (((devrev & 0x0c) >> 2) + 0x0a)) << 8 | (rev & 0xff);
 	}
 
 	tfa->rev = rev;

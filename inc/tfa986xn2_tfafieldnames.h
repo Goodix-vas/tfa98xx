@@ -1,13 +1,13 @@
 /** Filename: tfa986xn2_tfafieldnames.h
- *  This file was generated automatically on 03/21/24 at 15:12:29. 
- *  Source file: TFA986xN2_GPA21_N2A0_I2C_RegisterMap.xlsx
+ *  This file was generated automatically on 09/23/24 at 11:20:42. 
+ *  Source file: TFA986xN2_GPA21_N2B0_I2C_RegisterMap.xlsx
  */
 
 #ifndef _TFA986XN2_TFAFIELDNAMES_H
 #define _TFA986XN2_TFAFIELDNAMES_H
 
 
-#define TFA986XN2_I2CVERSION    39
+#define TFA986XN2_I2CVERSION    9
 
 typedef enum tfa986xn2BfEnumList {
     TFA986XN2_BF_PWDN  = 0x0000,    /*!< Powerdown selection                                */
@@ -30,7 +30,7 @@ typedef enum tfa986xn2BfEnumList {
     TFA986XN2_BF_MANEDCTH= 0x01d0,    /*!< Device response to too high DC level flag (DCTH is 1) */
     TFA986XN2_BF_AUDFS = 0x0203,    /*!< Sample rate (Fs)                                   */
     TFA986XN2_BF_FRACTDEL= 0x0256,    /*!< V/I Fractional delay                               */
-    TFA986XN2_BF_REV   = 0x030f,    /*!< product                                            */
+    TFA986XN2_BF_REV   = 0x030f,    /*!< Product                                            */
     TFA986XN2_BF_REFCKEXT= 0x0400,    /*!< PLL external ref clock                             */
     TFA986XN2_BF_BYTDMGLF= 0x0420,    /*!< Bypass TDM FS/BCK/DATAI giltch filter              */
     TFA986XN2_BF_MANAOOSC= 0x0460,    /*!< Internal oscillator control during power down mode */
@@ -38,9 +38,9 @@ typedef enum tfa986xn2BfEnumList {
     TFA986XN2_BF_CLKREFSYNCEN= 0x0490,    /*!< Enable PLL reference clock synchronisation for clock divider */
     TFA986XN2_BF_PWMFREQ= 0x04a0,    /*!< PWM output frequency select                        */
     TFA986XN2_BF_CGUSYNCDCG= 0x0500,    /*!< Clock gating control for CGU synchronisation module */
-    TFA986XN2_BF_IPMBYP= 0x0510,    /*!< bypass ipm synchromizser in DPSA block             */
-    TFA986XN2_BF_DEVCAT= 0x0607,    /*!< product category                                   */
-    TFA986XN2_BF_DEVREV= 0x0687,    /*!< version                                            */
+    TFA986XN2_BF_IPMBYP= 0x0510,    /*!< Bypass ipm synchromizser in DPSA block             */
+    TFA986XN2_BF_DEVCAT= 0x0607,    /*!< Product category                                   */
+    TFA986XN2_BF_DEVREV= 0x0687,    /*!< Version                                            */
     TFA986XN2_BF_VDDS  = 0x1000,    /*!< POR (sticky flag, clear on write a '1')            */
     TFA986XN2_BF_OTDS  = 0x1010,    /*!< OTP alarm (sticky flag,  clear on write a '1')     */
     TFA986XN2_BF_UVDS  = 0x1020,    /*!< UVP alarm (sticky flag,  clear on write a '1')     */
@@ -152,14 +152,16 @@ typedef enum tfa986xn2BfEnumList {
     TFA986XN2_BF_IPOOVDS= 0x4ca0,    /*!< Interrupt polarity OVP alarm                       */
     TFA986XN2_BF_IPOQPFAIL= 0x4cb0,    /*!< Interrupt polarity qpump failure                   */
     TFA986XN2_BF_BSSCLRST= 0x50d0,    /*!< Reset clipper  auto-clear                          */
-    TFA986XN2_BF_BSSR  = 0x50e0,    /*!< Battery voltage read out                           */
+    TFA986XN2_BF_BSSR  = 0x50e0,    /*!< Battery voltage read out in BATS bitfield          */
     TFA986XN2_BF_BSSBY = 0x50f0,    /*!< Bypass battery safeguard                           */
+    TFA986XN2_BF_DCDITH= 0x5140,    /*!< DC dithering selection                             */
     TFA986XN2_BF_HPFBYP= 0x5150,    /*!< Bypass HPF                                         */
+    TFA986XN2_BF_PWMPH = 0x5203,    /*!< Select pwm phase wrt TDM_FS signal                 */
     TFA986XN2_BF_AMPGAIN= 0x5257,    /*!< Amplifier gain                                     */
     TFA986XN2_BF_BYPDLYLINE= 0x52f0,    /*!< Bypass the interpolator delay line                 */
-    TFA986XN2_BF_AMPSLP= 0x5481,    /*!< amplifier slope control                            */
-    TFA986XN2_BF_BSTSLP= 0x54a1,    /*!< booster slope control                              */
-    TFA986XN2_BF_BSSMVBS= 0x5a00,    /*!< min_vbat source select                             */
+    TFA986XN2_BF_AMPSLP= 0x5481,    /*!< Amplifier slope control                            */
+    TFA986XN2_BF_BSTSLP= 0x54a1,    /*!< Booster slope control                              */
+    TFA986XN2_BF_BSSMVBS= 0x5a00,    /*!< Min_vbat source select                             */
     TFA986XN2_BF_DCMCC = 0x5a13,    /*!< Battery current limiter initial value              */
     TFA986XN2_BF_BSST  = 0x5a53,    /*!< BSS threshold Vbat value (reducing gain)           */
     TFA986XN2_BF_BSSAR = 0x5a91,    /*!< BSS attack rate (reducing gain)                    */
@@ -176,12 +178,14 @@ typedef enum tfa986xn2BfEnumList {
     TFA986XN2_BF_BSSDCS= 0x5c81,    /*!< Battery supply safeguard steepness (reducing DCMCC) */
     TFA986XN2_BF_BSSDCRL= 0x5ca2,    /*!< BSS allowed reduction level (reducing DCMCC)       */
     TFA986XN2_BF_DCLIPFLS= 0x5cd1,    /*!< Select source for BSS flag                         */
-    TFA986XN2_BF_BSSBYDB= 0x5cf0,    /*!< Bypass the effect of BSS on dynamic boost voltage  */
+    TFA986XN2_BF_BSSBYDB= 0x5cf0,    /*!< Bypass the effect of BSS on boost voltage          */
     TFA986XN2_BF_TDMSPKG= 0x5f54,    /*!< TDM signal attenuation                             */
     TFA986XN2_BF_IPM   = 0x60e1,    /*!< Idle power mode control                            */
     TFA986XN2_BF_LDMSEG= 0x62b2,    /*!< Amplifier low drive   mode                         */
     TFA986XN2_BF_LDM   = 0x63c1,    /*!< Low drive mode detector control                    */
     TFA986XN2_BF_RCVM  = 0x63e1,    /*!< Handset/Receiver mode                              */
+    TFA986XN2_BF_VBATHOLD= 0x6555,    /*!< Select hold time for VBAT(min/max)                 */
+    TFA986XN2_BF_VBATMAX= 0x65b0,    /*!< Select between vbat minimum or maximum for Chip Sense output on TDM  VBAT(min/max) */
     TFA986XN2_BF_LPM   = 0x66e1,    /*!< Low power mode control                             */
     TFA986XN2_BF_TDMSRCMAP= 0x6802,    /*!< TDM source mapping                                 */
     TFA986XN2_BF_TDMSRCAS= 0x6842,    /*!< Sensed value A                                     */
@@ -190,23 +194,24 @@ typedef enum tfa986xn2BfEnumList {
     TFA986XN2_BF_TDMSRCCS= 0x6902,    /*!< Sensed value C                                     */
     TFA986XN2_BF_TDMSRCDS= 0x6932,    /*!< Sensed value D                                     */
     TFA986XN2_BF_TDMSRCES= 0x6962,    /*!< Sensed value E                                     */
-    TFA986XN2_BF_TDMVBAT= 0x6990,    /*!< select vbat to return to TDM interface             */
+    TFA986XN2_BF_TDMVBAT= 0x6990,    /*!< Select vbat to return to TDM interface             */
     TFA986XN2_BF_IPMS  = 0x6e00,    /*!< Idle power mode                                    */
-    TFA986XN2_BF_LVLCLPPWM= 0x6f72,    /*!< clip detect threshold control                      */
+    TFA986XN2_BF_LVLCLPPWM= 0x6f72,    /*!< Clip detect threshold control                      */
     TFA986XN2_BF_DCIE  = 0x7060,    /*!< Adaptive boost mode                                */
     TFA986XN2_BF_DCNS  = 0x7400,    /*!< Disable control of noise shaper in DCDC control    */
     TFA986XN2_BF_DCNSRST= 0x7410,    /*!< Disable control of reset of noise shaper when 8 bit value for dcdc control occurs */
-    TFA986XN2_BF_DCOFFSET= 0x7424,    /*!< Boost Trip Level Offset                            */
+    TFA986XN2_BF_DCOFFSET= 0x7424,    /*!< Boost headroom  Offset                             */
     TFA986XN2_BF_DCHOLD= 0x7494,    /*!< Hold time for booster                              */
     TFA986XN2_BF_DCINT = 0x74e0,    /*!< Selection of data for adaptive boost algorithm, effective only when DCIE is set to 1 */
     TFA986XN2_BF_DCTRIP= 0x7509,    /*!< 1st Adaptive boost trip level, effective only when DCIE is set to 1 */
-    TFA986XN2_BF_DCTRIPT= 0x75a4,    /*!< Offset between Booster voltage and audio signal output amplitude, effective only when DCIE is 1 */
+    TFA986XN2_BF_DCTRIPT= 0x75a4,    /*!< Booster headroom gain, increasing headroom when signal amplitude increase */
     TFA986XN2_BF_BYPDCLPF= 0x75f0,    /*!< Bypass control of DCDC control low pass filter for quantization noise suppression */
     TFA986XN2_BF_DCVOS = 0x7687,    /*!< Maximum boost voltage                              */
     TFA986XN2_BF_MUSMODE= 0x7cc0,    /*!< Music Mode                                         */
     TFA986XN2_BF_LNM   = 0x7ce1,    /*!< Low Noise Mode control when in Music Mode          */
-    TFA986XN2_BF_DCPTC = 0x8401,    /*!< Voltage sense dc protection time                   */
-    TFA986XN2_BF_DCPL  = 0x842c,    /*!< Voltage sense dc protection level                  */
+    TFA986XN2_BF_DCPTC = 0x8401,    /*!< Voltage sense dc speaker protection time           */
+    TFA986XN2_BF_DCPL  = 0x842c,    /*!< Voltage sense dc speaker protection level          */
+    TFA986XN2_BF_DCPROT= 0x84f0,    /*!< Voltage sense dc speaker protection enable         */
     TFA986XN2_BF_EFUSEK= 0xa107,    /*!< EFUSE KEY2 register                                */
     TFA986XN2_BF_KEY1LOCKED= 0xa200,    /*!< Indicates KEY1 is locked                           */
     TFA986XN2_BF_KEY2LOCKED= 0xa210,    /*!< Indicates KEY2 is locked                           */
@@ -218,7 +223,7 @@ typedef enum tfa986xn2BfEnumList {
     TFA986XN2_BF_PLLSTRTM= 0xce42,    /*!< PLL startup time selection control                 */
     TFA986XN2_BF_SWPROFIL= 0xe00f,    /*!< Software profile data                              */
     TFA986XN2_BF_SWVSTEP= 0xe10f,    /*!< Software vstep information                         */
-    TFA986XN2_BF_ADC11GAIN= 0xf6a5,    /*!< adc11b gain compensation setting, compensate factor (2's complement) */
+    TFA986XN2_BF_ADC11GAIN= 0xf6a5,    /*!< Adc11b gain compensation setting, compensate factor (2's complement) */
 } tfa986xn2BfEnumList_t;
 #define TFA986XN2_NAMETABLE static tfaBfName_t Tfa986xn2DatasheetNames[]= {\
    { 0x0, "PWDN"},    /* Powerdown selection                               , */\
@@ -241,7 +246,7 @@ typedef enum tfa986xn2BfEnumList {
    { 0x1d0, "MANEDCTH"},    /* Device response to too high DC level flag (DCTH is 1), */\
    { 0x203, "AUDFS"},    /* Sample rate (Fs)                                  , */\
    { 0x256, "FRACTDEL"},    /* V/I Fractional delay                              , */\
-   { 0x30f, "REV"},    /* product                                           , */\
+   { 0x30f, "REV"},    /* Product                                           , */\
    { 0x400, "REFCKEXT"},    /* PLL external ref clock                            , */\
    { 0x420, "BYTDMGLF"},    /* Bypass TDM FS/BCK/DATAI giltch filter             , */\
    { 0x460, "MANAOOSC"},    /* Internal oscillator control during power down mode, */\
@@ -249,9 +254,9 @@ typedef enum tfa986xn2BfEnumList {
    { 0x490, "CLKREFSYNCEN"},    /* Enable PLL reference clock synchronisation for clock divider, */\
    { 0x4a0, "PWMFREQ"},    /* PWM output frequency select                       , */\
    { 0x500, "CGUSYNCDCG"},    /* Clock gating control for CGU synchronisation module, */\
-   { 0x510, "IPMBYP"},    /* bypass ipm synchromizser in DPSA block            , */\
-   { 0x607, "DEVCAT"},    /* product category                                  , */\
-   { 0x687, "DEVREV"},    /* version                                           , */\
+   { 0x510, "IPMBYP"},    /* Bypass ipm synchromizser in DPSA block            , */\
+   { 0x607, "DEVCAT"},    /* Product category                                  , */\
+   { 0x687, "DEVREV"},    /* Version                                           , */\
    { 0x1000, "VDDS"},    /* POR (sticky flag, clear on write a '1')           , */\
    { 0x1010, "OTDS"},    /* OTP alarm (sticky flag,  clear on write a '1')    , */\
    { 0x1020, "UVDS"},    /* UVP alarm (sticky flag,  clear on write a '1')    , */\
@@ -363,14 +368,16 @@ typedef enum tfa986xn2BfEnumList {
    { 0x4ca0, "IPOOVDS"},    /* Interrupt polarity OVP alarm                      , */\
    { 0x4cb0, "IPOQPFAIL"},    /* Interrupt polarity qpump failure                  , */\
    { 0x50d0, "BSSCLRST"},    /* Reset clipper  auto-clear                         , */\
-   { 0x50e0, "BSSR"},    /* Battery voltage read out                          , */\
+   { 0x50e0, "BSSR"},    /* Battery voltage read out in BATS bitfield         , */\
    { 0x50f0, "BSSBY"},    /* Bypass battery safeguard                          , */\
+   { 0x5140, "DCDITH"},    /* DC dithering selection                            , */\
    { 0x5150, "HPFBYP"},    /* Bypass HPF                                        , */\
+   { 0x5203, "PWMPH"},    /* Select pwm phase wrt TDM_FS signal                , */\
    { 0x5257, "AMPGAIN"},    /* Amplifier gain                                    , */\
    { 0x52f0, "BYPDLYLINE"},    /* Bypass the interpolator delay line                , */\
-   { 0x5481, "AMPSLP"},    /* amplifier slope control                           , */\
-   { 0x54a1, "BSTSLP"},    /* booster slope control                             , */\
-   { 0x5a00, "BSSMVBS"},    /* min_vbat source select                            , */\
+   { 0x5481, "AMPSLP"},    /* Amplifier slope control                           , */\
+   { 0x54a1, "BSTSLP"},    /* Booster slope control                             , */\
+   { 0x5a00, "BSSMVBS"},    /* Min_vbat source select                            , */\
    { 0x5a13, "DCMCC"},    /* Battery current limiter initial value             , */\
    { 0x5a53, "BSST"},    /* BSS threshold Vbat value (reducing gain)          , */\
    { 0x5a91, "BSSAR"},    /* BSS attack rate (reducing gain)                   , */\
@@ -387,12 +394,14 @@ typedef enum tfa986xn2BfEnumList {
    { 0x5c81, "BSSDCS"},    /* Battery supply safeguard steepness (reducing DCMCC), */\
    { 0x5ca2, "BSSDCRL"},    /* BSS allowed reduction level (reducing DCMCC)      , */\
    { 0x5cd1, "DCLIPFLS"},    /* Select source for BSS flag                        , */\
-   { 0x5cf0, "BSSBYDB"},    /* Bypass the effect of BSS on dynamic boost voltage , */\
+   { 0x5cf0, "BSSBYDB"},    /* Bypass the effect of BSS on boost voltage         , */\
    { 0x5f54, "TDMSPKG"},    /* TDM signal attenuation                            , */\
    { 0x60e1, "IPM"},    /* Idle power mode control                           , */\
    { 0x62b2, "LDMSEG"},    /* Amplifier low drive   mode                        , */\
    { 0x63c1, "LDM"},    /* Low drive mode detector control                   , */\
    { 0x63e1, "RCVM"},    /* Handset/Receiver mode                             , */\
+   { 0x6555, "VBATHOLD"},    /* Select hold time for VBAT(min/max)                , */\
+   { 0x65b0, "VBATMAX"},    /* Select between vbat minimum or maximum for Chip Sense output on TDM  VBAT(min/max), */\
    { 0x66e1, "LPM"},    /* Low power mode control                            , */\
    { 0x6802, "TDMSRCMAP"},    /* TDM source mapping                                , */\
    { 0x6842, "TDMSRCAS"},    /* Sensed value A                                    , */\
@@ -401,23 +410,24 @@ typedef enum tfa986xn2BfEnumList {
    { 0x6902, "TDMSRCCS"},    /* Sensed value C                                    , */\
    { 0x6932, "TDMSRCDS"},    /* Sensed value D                                    , */\
    { 0x6962, "TDMSRCES"},    /* Sensed value E                                    , */\
-   { 0x6990, "TDMVBAT"},    /* select vbat to return to TDM interface            , */\
+   { 0x6990, "TDMVBAT"},    /* Select vbat to return to TDM interface            , */\
    { 0x6e00, "IPMS"},    /* Idle power mode                                   , */\
-   { 0x6f72, "LVLCLPPWM"},    /* clip detect threshold control                     , */\
+   { 0x6f72, "LVLCLPPWM"},    /* Clip detect threshold control                     , */\
    { 0x7060, "DCIE"},    /* Adaptive boost mode                               , */\
    { 0x7400, "DCNS"},    /* Disable control of noise shaper in DCDC control   , */\
    { 0x7410, "DCNSRST"},    /* Disable control of reset of noise shaper when 8 bit value for dcdc control occurs, */\
-   { 0x7424, "DCOFFSET"},    /* Boost Trip Level Offset                           , */\
+   { 0x7424, "DCOFFSET"},    /* Boost headroom  Offset                            , */\
    { 0x7494, "DCHOLD"},    /* Hold time for booster                             , */\
    { 0x74e0, "DCINT"},    /* Selection of data for adaptive boost algorithm, effective only when DCIE is set to 1, */\
    { 0x7509, "DCTRIP"},    /* 1st Adaptive boost trip level, effective only when DCIE is set to 1, */\
-   { 0x75a4, "DCTRIPT"},    /* Offset between Booster voltage and audio signal output amplitude, effective only when DCIE is 1, */\
+   { 0x75a4, "DCTRIPT"},    /* Booster headroom gain, increasing headroom when signal amplitude increase, */\
    { 0x75f0, "BYPDCLPF"},    /* Bypass control of DCDC control low pass filter for quantization noise suppression, */\
    { 0x7687, "DCVOS"},    /* Maximum boost voltage                             , */\
    { 0x7cc0, "MUSMODE"},    /* Music Mode                                        , */\
    { 0x7ce1, "LNM"},    /* Low Noise Mode control when in Music Mode         , */\
-   { 0x8401, "DCPTC"},    /* Voltage sense dc protection time                  , */\
-   { 0x842c, "DCPL"},    /* Voltage sense dc protection level                 , */\
+   { 0x8401, "DCPTC"},    /* Voltage sense dc speaker protection time          , */\
+   { 0x842c, "DCPL"},    /* Voltage sense dc speaker protection level         , */\
+   { 0x84f0, "DCPROT"},    /* Voltage sense dc speaker protection enable        , */\
    { 0xa107, "EFUSEK"},    /* EFUSE KEY2 register                               , */\
    { 0xa200, "KEY1LOCKED"},    /* Indicates KEY1 is locked                          , */\
    { 0xa210, "KEY2LOCKED"},    /* Indicates KEY2 is locked                          , */\
@@ -429,7 +439,7 @@ typedef enum tfa986xn2BfEnumList {
    { 0xce42, "PLLSTRTM"},    /* PLL startup time selection control                , */\
    { 0xe00f, "SWPROFIL"},    /* Software profile data                             , */\
    { 0xe10f, "SWVSTEP"},    /* Software vstep information                        , */\
-   { 0xf6a5, "ADC11GAIN"},    /* adc11b gain compensation setting, compensate factor (2's complement), */\
+   { 0xf6a5, "ADC11GAIN"},    /* Adc11b gain compensation setting, compensate factor (2's complement), */\
    { 0xffff,"Unknown bitfield enum" }   /* not found */\
 };
 
@@ -454,7 +464,7 @@ typedef enum tfa986xn2BfEnumList {
    { 0x1d0, "man_enbl_dc_too_high"},    /* Device response to too high DC level flag (DCTH is 1), */\
    { 0x203, "audio_fs"},    /* Sample rate (Fs)                                  , */\
    { 0x256, "cs_frac_delay"},    /* V/I Fractional delay                              , */\
-   { 0x30f, "product"},    /* product                                           , */\
+   { 0x30f, "product"},    /* Product                                           , */\
    { 0x400, "pll_clkin_sel"},    /* PLL external ref clock                            , */\
    { 0x420, "bypass_tdm_glitch_filter"},    /* Bypass TDM FS/BCK/DATAI giltch filter             , */\
    { 0x460, "enbl_osc_auto_off"},    /* Internal oscillator control during power down mode, */\
@@ -462,11 +472,11 @@ typedef enum tfa986xn2BfEnumList {
    { 0x490, "enbl_clkref_sync"},    /* Enable PLL reference clock synchronisation for clock divider, */\
    { 0x4a0, "sel_pwm_freq"},    /* PWM output frequency select                       , */\
    { 0x500, "disable_cgu_sync_cgate"},    /* Clock gating control for CGU synchronisation module, */\
-   { 0x510, "dpsa_bypass_ipm_sync"},    /* bypass ipm synchromizser in DPSA block            , */\
-   { 0x607, "category"},    /* product category                                  , */\
-   { 0x687, "version"},    /* version                                           , */\
+   { 0x510, "dpsa_bypass_ipm_sync"},    /* Bypass ipm synchromizser in DPSA block            , */\
+   { 0x607, "category"},    /* Product category                                  , */\
+   { 0x687, "version"},    /* Version                                           , */\
    { 0x802, "ctrl_on2off_criterion"},    /* Amplifier on-off criteria for shutdown            , */\
-   { 0x834, "cmff_ctrl_nskip"},    /* Skip or shorten CMFF pulses in 2048fs cycles to create headroom at the bottom , */\
+   { 0x834, "cmff_ctrl_nskip"},    /* Skip or shorten CMFF pulses in 4096fs cycles to create headroom at the bottom , */\
    { 0x883, "cmff_ctrl_nclipmax"},    /* Limit lenght CMFF pulses to remove the above headroom in case of clipping at the top vddp is 12V, */\
    { 0xf0f, "hidden_code"},    /* Hidden code to enable access to key registers     , */\
    { 0x1000, "flag_por"},    /* POR (sticky flag, clear on write a '1')           , */\
@@ -511,7 +521,7 @@ typedef enum tfa986xn2BfEnumList {
    { 0x1509, "bat_adc"},    /* Battery voltage monitoring (V)                    , */\
    { 0x1608, "temp_adc"},    /* IC Temperature monitoring (C)                     , */\
    { 0x1709, "vddp_adc"},    /* Amplifier supply / booster voltage monitoring (V) , */\
-   { 0x1800, "pll_mdiv_mode"},    /* feedback divider mode selection signal, for testing, */\
+   { 0x1800, "pll_mdiv_mode"},    /* Feedback divider mode selection signal, for testing, */\
    { 0x1817, "pll_dpll_itrim"},    /* Dpll trim cco current code , for testing                                                                                  , */\
    { 0x1894, "pll_mdiv_ps"},    /* Prescaler threshold value in feedback divider for testing , */\
    { 0x190b, "pll_mdiv_p"},    /* Program counter threshold value in feedback divider, for testing , */\
@@ -587,25 +597,27 @@ typedef enum tfa986xn2BfEnumList {
    { 0x4ca0, "int_polarity_flag_ovpok"},    /* Interrupt polarity OVP alarm                      , */\
    { 0x4cb0, "int_polarity_flag_qpump_fail"},    /* Interrupt polarity qpump failure                  , */\
    { 0x50d0, "rst_min_vbat"},    /* Reset clipper  auto-clear                         , */\
-   { 0x50e0, "sel_vbat"},    /* Battery voltage read out                          , */\
+   { 0x50e0, "sel_vbat"},    /* Battery voltage read out in BATS bitfield         , */\
    { 0x50f0, "bypass_clipper"},    /* Bypass battery safeguard                          , */\
+   { 0x5140, "sel_dithering"},    /* DC dithering selection                            , */\
    { 0x5150, "bypass_hp"},    /* Bypass HPF                                        , */\
    { 0x5166, "audio_delay"},    /* Set the audio data delay time before send to spkr , */\
+   { 0x5203, "sel_pwm_phase"},    /* Select pwm phase wrt TDM_FS signal                , */\
    { 0x5257, "gain"},    /* Amplifier gain                                    , */\
    { 0x52f0, "bypass_dly_line"},    /* Bypass the interpolator delay line                , */\
    { 0x5452, "amp_drive"},    /* Drive setting of AMP powerstage when amp_use_direct_ctrls is set to 1, */\
-   { 0x5481, "amp_pst_slope"},    /* amplifier slope control                           , */\
-   { 0x54a1, "bst_pst_slope"},    /* booster slope control                             , */\
+   { 0x5481, "amp_pst_slope"},    /* Amplifier slope control                           , */\
+   { 0x54a1, "bst_pst_slope"},    /* Booster slope control                             , */\
    { 0x54c1, "amp_pst_bbm"},    /* Amplifier break-before-make delay                 , */\
    { 0x54e1, "bst_pst_bbm"},    /* Booster break-before-make delay                   , */\
    { 0x5810, "hard_mute"},    /* Hard mute - PWM                                   , */\
    { 0x5823, "disable_dpwm_outputs"},    /* Disable dPwm outputs                              , */\
    { 0x5860, "disable_cmff"},    /* Disable cmff                                      , */\
-   { 0x5870, "dpwm_sel_dc_in"},    /* select I2C dc-level as input to dpwm modulator    , */\
-   { 0x5880, "cmff_sel_dc_in"},    /* select i2c_dc_level as input to cmff              , */\
-   { 0x5907, "dpwm_dc_in"},    /* dc_level input to derive dpwm signals             , */\
-   { 0x5987, "cmff_dc_in"},    /* dc_level input to derive cmff signals             , */\
-   { 0x5a00, "bss_minvbat_select"},    /* min_vbat source select                            , */\
+   { 0x5870, "dpwm_sel_dc_in"},    /* Select I2C dc-level as input to dpwm modulator    , */\
+   { 0x5880, "cmff_sel_dc_in"},    /* Select i2c_dc_level as input to cmff              , */\
+   { 0x5907, "dpwm_dc_in"},    /* Dc_level input to derive dpwm signals             , */\
+   { 0x5987, "cmff_dc_in"},    /* Dc_level input to derive cmff signals             , */\
+   { 0x5a00, "bss_minvbat_select"},    /* Min_vbat source select                            , */\
    { 0x5a13, "bss_dcmcc"},    /* Battery current limiter initial value             , */\
    { 0x5a53, "bss_threshold"},    /* BSS threshold Vbat value (reducing gain)          , */\
    { 0x5a91, "bss_attack_rate"},    /* BSS attack rate (reducing gain)                   , */\
@@ -622,7 +634,7 @@ typedef enum tfa986xn2BfEnumList {
    { 0x5c81, "bssdc_steepness"},    /* Battery supply safeguard steepness (reducing DCMCC), */\
    { 0x5ca2, "bssdc_reduction_limit"},    /* BSS allowed reduction level (reducing DCMCC)      , */\
    { 0x5cd1, "bss_flag_select"},    /* Select source for BSS flag                        , */\
-   { 0x5cf0, "bypass_bss"},    /* Bypass the effect of BSS on dynamic boost voltage , */\
+   { 0x5cf0, "bypass_bss"},    /* Bypass the effect of BSS on boost voltage         , */\
    { 0x5f54, "ctrl_attr"},    /* TDM signal attenuation                            , */\
    { 0x6005, "idle_power_cal_offset"},    /* Idle power mode detector ctrl cal_offset from gain module , */\
    { 0x6065, "idle_power_zero_lvl"},    /* IIdle power mode zero crossing detection level (TDMSPKG and INPLEV set to 0), */\
@@ -642,8 +654,8 @@ typedef enum tfa986xn2BfEnumList {
    { 0x6410, "bst_lowdrive"},    /* Boost low drive mode control in direct mode       , */\
    { 0x6503, "vth_vddpvbat"},    /* Select vddp-vbat threshold signal                 , */\
    { 0x6540, "lpen_vddpvbat"},    /* Select vddp-vbat filtred vs unfiltered compare    , */\
-   { 0x6555, "vbat_min_hold_time"},    /* Select hold time for vbat_min                     , */\
-   { 0x65b0, "vbat_min_max"},    /* Select between minimum or maximum of vbat         , */\
+   { 0x6555, "vbat_min_hold_time"},    /* Select hold time for VBAT(min/max)                , */\
+   { 0x65b0, "vbat_min_max"},    /* Select between vbat minimum or maximum for Chip Sense output on TDM  VBAT(min/max), */\
    { 0x6605, "low_power_cal_offset"},    /* Low power mode detector   ctrl cal_offset from gain module , */\
    { 0x6665, "low_power_zero_lvl"},    /* Low power mode   zero crossing  detection level   , */\
    { 0x66e1, "low_power_mode"},    /* Low power mode control                            , */\
@@ -661,23 +673,23 @@ typedef enum tfa986xn2BfEnumList {
    { 0x6902, "tdm_sourcec_frame_sel"},    /* Sensed value C                                    , */\
    { 0x6932, "tdm_sourced_frame_sel"},    /* Sensed value D                                    , */\
    { 0x6962, "tdm_sourcee_frame_sel"},    /* Sensed value E                                    , */\
-   { 0x6990, "tdm_sel_vbat"},    /* select vbat to return to TDM interface            , */\
+   { 0x6990, "tdm_sel_vbat"},    /* Select vbat to return to TDM interface            , */\
    { 0x6b00, "disable_auto_engage"},    /* Disable auto engage                               , */\
    { 0x6b10, "disable_engage"},    /* Disable engage                                    , */\
-   { 0x6c60, "dly_bss_rst"},    /* delay bss reset                                   , */\
+   { 0x6c60, "dly_bss_rst"},    /* Delay bss reset                                   , */\
    { 0x6c78, "spare_out"},    /* Spare control bits for future use                 , */\
    { 0x6d09, "spare_in"},    /* Spare control bit - read only                     , */\
    { 0x6e00, "flag_idle_power_mode"},    /* Idle power mode                                   , */\
-   { 0x6f72, "pwm_clip_lvl"},    /* clip detect threshold control                     , */\
+   { 0x6f72, "pwm_clip_lvl"},    /* Clip detect threshold control                     , */\
    { 0x7060, "boost_intel"},    /* Adaptive boost mode                               , */\
    { 0x7103, "bst_drive"},    /* Drive setting of Booster powerstage               , */\
    { 0x7400, "dcdc_disable_ns"},    /* Disable control of noise shaper in DCDC control   , */\
    { 0x7410, "dcdc_disable_mod8bit"},    /* Disable control of reset of noise shaper when 8 bit value for dcdc control occurs, */\
-   { 0x7424, "boost_trip_lvl_offset"},    /* Boost Trip Level Offset                           , */\
+   { 0x7424, "boost_trip_lvl_offset"},    /* Boost headroom  Offset                            , */\
    { 0x7494, "track_hold_time"},    /* Hold time for booster                             , */\
    { 0x74e0, "sel_dcdc_envelope_8fs"},    /* Selection of data for adaptive boost algorithm, effective only when DCIE is set to 1, */\
    { 0x7509, "boost_trip_lvl_1st"},    /* 1st Adaptive boost trip level, effective only when DCIE is set to 1, */\
-   { 0x75a4, "boost_trip_lvl_track"},    /* Offset between Booster voltage and audio signal output amplitude, effective only when DCIE is 1, */\
+   { 0x75a4, "boost_trip_lvl_track"},    /* Booster headroom gain, increasing headroom when signal amplitude increase, */\
    { 0x75f0, "bypass_dcdc_lpf"},    /* Bypass control of DCDC control low pass filter for quantization noise suppression, */\
    { 0x7687, "scnd_boost_voltage"},    /* Maximum boost voltage                             , */\
    { 0x7800, "enbl_bst_freqmin"},    /* Enable booster minimum frequency limitation       , */\
@@ -696,14 +708,21 @@ typedef enum tfa986xn2BfEnumList {
    { 0x7c65, "low_noise_hold_time"},    /* Low noise mode detector   ctrl hold time before low audio is reckoned to be low audio, */\
    { 0x7cc0, "amp_gain_mode"},    /* Music Mode                                        , */\
    { 0x7ce1, "lownoisegain_mode"},    /* Low Noise Mode control when in Music Mode         , */\
+   { 0x8000, "cvs_bulk_hv_to_vddp"},    /* IITF 16V bulk                                     , */\
+   { 0x8010, "cvs_ibias_max"},    /* IITF  bias current                                , */\
+   { 0x8020, "cvs_iitf_chop_hs_dis"},    /* IITF  chop high side disable                      , */\
+   { 0x8030, "cvs_iitf_chop_ls_dis"},    /* IITF  chop low side disable                       , */\
    { 0x8050, "cs_gain_control"},    /* Current sense gain control                        , */\
    { 0x8060, "cs_bypass_gc"},    /* Bypasses the CS gain correction                   , */\
    { 0x8087, "cs_gain"},    /* Current sense gain                                , */\
    { 0x8305, "cs_ktemp"},    /* Current sense temperature compensation trimming (1 - VALUE*TEMP)*signal, */\
-   { 0x8401, "volsense_dc_prot_time"},    /* Voltage sense dc protection time                  , */\
-   { 0x842c, "volsense_dc_prot_level"},    /* Voltage sense dc protection level                 , */\
-   { 0x84f0, "enbl_dcprot"},    /* Voltage sense dc protection enable                , */\
-   { 0x850c, "volsense_dc_level"},    /* voltage sense dc level                            , */\
+   { 0x8401, "volsense_dc_prot_time"},    /* Voltage sense dc speaker protection time          , */\
+   { 0x842c, "volsense_dc_prot_level"},    /* Voltage sense dc speaker protection level         , */\
+   { 0x84f0, "enbl_dcprot"},    /* Voltage sense dc speaker protection enable        , */\
+   { 0x850c, "volsense_dc_level"},    /* Voltage sense dc level                            , */\
+   { 0x8600, "cvs_iitf_chop_clk_en"},    /* IITF chop clock enable                            , */\
+   { 0x8610, "cvs_iitf_chop_clk_static"},    /* IITF chop clock static                            , */\
+   { 0x8622, "cvs_iitf_chop_clk_ratio"},    /* IITF chop clock Ration                            , */\
    { 0x8790, "enbl_dc_filter"},    /* Control for enabling the DC blocking filter for voltage and current sense, */\
    { 0x87a0, "enbl_ana_pre"},    /* Control for enabling the pre-empasis filter for voltage and current sense decimator, */\
    { 0x87b0, "enbl_dec_rst"},    /* Enble decimator reset in idle power mode          , */\
@@ -721,7 +740,7 @@ typedef enum tfa986xn2BfEnumList {
    { 0xa360, "auto_copy_efuse_to_iic"},    /* Start copying all the data from efuse to I2C efuse registers, */\
    { 0xa370, "auto_copy_iic_to_efuse"},    /* Start copying data from I2C efuse registers to efuse, */\
    { 0xa40f, "efuse_man_data_out"},    /* EFUSE manual read data                            , */\
-   { 0xa50f, "efuse_man_data_in"},    /* write data for EFUSE manual write                 , */\
+   { 0xa50f, "efuse_man_data_in"},    /* Write data for EFUSE manual write                 , */\
    { 0xa600, "efuse_vdd_ctrl"},    /* EFUSE AVDD enable                                 , */\
    { 0xa700, "disable_copy_efuse_to_iic"},    /* Disable efuse copy to i2c register                , */\
    { 0xb010, "bypass_ocpcounter"},    /* Bypass OCP Counter                                , */\
@@ -744,11 +763,12 @@ typedef enum tfa986xn2BfEnumList {
    { 0xc090, "ref_use_direct_ctrls"},    /* Direct control for references                     , */\
    { 0xc0a0, "atb_use_direct_ctrls"},    /* Direct control for analog test bus                , */\
    { 0xc0b0, "qpump_use_direct_ctrls"},    /* Direct control for charge pump                    , */\
+   { 0xc0c0, "enbl_qpump_clk"},    /* Enable qpump clock                                , */\
    { 0xc0d0, "enbl_ringo"},    /* Enable the ring oscillator for test purpose       , */\
    { 0xc0e0, "enbl_fro"},    /* Enables FRO8M when fro_use_direct_ctrls set to 1  , */\
    { 0xc0f0, "atb_trigger"},    /* Trigger ATB controller, auto-clear                , */\
    { 0xc110, "clk_efuse_sel"},    /* Select clk_efuse source((for programming to choose an extranl clock), */\
-   { 0xc120, "clk_atb_sel"},    /* used to select the source of clk_atb(for testing) , */\
+   { 0xc120, "clk_atb_sel"},    /* Used to select the source of clk_atb(for testing) , */\
    { 0xc130, "enbl_efuse_ss"},    /* Sub-system EFUSE clock gate enable                , */\
    { 0xc20f, "abist_offset"},    /* Offset control for ABIST testing (two's complement), */\
    { 0xc311, "sourcep"},    /* Set OUTP to                                       , */\
@@ -770,6 +790,7 @@ typedef enum tfa986xn2BfEnumList {
    { 0xc6a0, "datao_out"},    /* DATAO output value, only effective in GPIO mode   , */\
    { 0xc6b0, "datao_ie"},    /* DATAO input control, only effective in GPIO mode  , */\
    { 0xc6c1, "datao_ds"},    /* DATAO pad output drive strength                   , */\
+   { 0xc6e1, "int_pupd"},    /* INT pad output drive strength                     , */\
    { 0xc700, "enbl_pll"},    /* Enables PLL when pll_use_direct_ctrls set to 1    , */\
    { 0xc712, "pll_dpll_clkref_div"},    /* DPLL prescaller  reference clock divider  when pll_use_direct_ctrls set to 1, */\
    { 0xc741, "pll_dpll_clkvco_div"},    /* DPLL VCO clock divider  when pll_use_direct_ctrls set to 1, */\
@@ -777,10 +798,10 @@ typedef enum tfa986xn2BfEnumList {
    { 0xc792, "pll_vco_gm_sel"},    /* PLL VCO gain value when pll_use_direct_ctrls set to 1, */\
    { 0xc7c2, "pll_lf_c0_sel"},    /* Loop filter capacitance C0 when pll_use_direct_ctrls set to 1, */\
    { 0xc7f0, "pll_dpll_itrim_bypass"},    /* Bypass the DPLL auto trimming and use pll_dpll_itrim_manual instead, */\
-   { 0xc801, "pll_lf_c1_sel"},    /* loop filter capacitance C1  when pll_use_direct_ctrls set to 1, */\
-   { 0xc821, "pll_lf_c2_sel"},    /* loop filter capacitance C2  when pll_use_direct_ctrls set to 1, */\
-   { 0xc842, "pll_lf_r0_sel"},    /* loop filter resistance R0  when pll_use_direct_ctrls set to 1, */\
-   { 0xc872, "pll_lf_r2_sel"},    /* loop filter resistance R2  when pll_use_direct_ctrls set to 1, */\
+   { 0xc801, "pll_lf_c1_sel"},    /* Loop filter capacitance C1  when pll_use_direct_ctrls set to 1, */\
+   { 0xc821, "pll_lf_c2_sel"},    /* Loop filter capacitance C2  when pll_use_direct_ctrls set to 1, */\
+   { 0xc842, "pll_lf_r0_sel"},    /* Loop filter resistance R0  when pll_use_direct_ctrls set to 1, */\
+   { 0xc872, "pll_lf_r2_sel"},    /* Loop filter resistance R2  when pll_use_direct_ctrls set to 1, */\
    { 0xc900, "pll_lf_ord4_sel"},    /* PLL Filter order selection                        , */\
    { 0xc934, "pll_pdiv"},    /* PLL PDIV when pll_use_direct_ctrls set to 1       , */\
    { 0xc987, "pll_ndiv"},    /* PLL NDIV when pll_use_direct_ctrls set to 1       , */\
@@ -795,13 +816,13 @@ typedef enum tfa986xn2BfEnumList {
    { 0xcba1, "pll_clkout_sel"},    /* PLL clock output channel selection                , */\
    { 0xcbc1, "pll_cp_op_bw"},    /* PLL charge pump amplifier bandwidth               , */\
    { 0xcbe1, "pll_cp_op_enhance"},    /* PLL charge pump amplifier output current enhance  , */\
-   { 0xcc87, "ana_spare_nokey"},    /* reseved for analog metal ECO                      , */\
+   { 0xcc87, "ana_spare_nokey"},    /* Reseved for analog metal ECO                      , */\
    { 0xcd07, "pll_dpll_itrim_manual"},    /* Valid when bypass the DPLL                        , */\
-   { 0xcd87, "ana_spare_key1"},    /* reseved for analog metal ECO                      , */\
+   { 0xcd87, "ana_spare_key1"},    /* Reseved for analog metal ECO                      , */\
    { 0xce20, "enbl_clk_out_of_range"},    /* Clock out of range checker                        , */\
    { 0xce30, "dcdcoff_mode"},    /* DCDC on/off                                       , */\
    { 0xce42, "sel_pll_startup_time"},    /* PLL startup time selection control                , */\
-   { 0xce87, "ana_spare_key2"},    /* reseved for analog metal ECO                      , */\
+   { 0xce87, "ana_spare_key2"},    /* Reseved for analog metal ECO                      , */\
    { 0xcf02, "adc11b_td_t"},    /* ADC setup time                                    , */\
    { 0xcf31, "adc11b_chn_sel"},    /* Select the input to convert for ADC11 when adc11_use_direct_ctrls  is set to 1, */\
    { 0xcf64, "adc11b_prog_sample"},    /* ADC11 program sample setting                      , */\
@@ -813,7 +834,7 @@ typedef enum tfa986xn2BfEnumList {
    { 0xd120, "bypass_lp_temp"},    /* Bypass the low pass filter inside temperature sensor, */\
    { 0xd200, "source_in_testmode"},    /* TDM source in test mode (return only current and voltage sense), */\
    { 0xd253, "test_spare_out1"},    /* Test spare out 1                                  , */\
-   { 0xd292, "sel_dpwm_signal"},    /* select signal to be tested                        , */\
+   { 0xd292, "sel_dpwm_signal"},    /* Select signal to be tested                        , */\
    { 0xd2c3, "test_spare_out2"},    /* Test spare out 2                                  , */\
    { 0xd300, "atb_reset"},    /* Analog Test Bus reset when atb_use_direct_ctrls  is set to 1, */\
    { 0xd312, "bst_fmin"},    /* Booster minimum frequency when bst_use_direct_ctrls is set to 1, */\
@@ -825,70 +846,71 @@ typedef enum tfa986xn2BfEnumList {
    { 0xd510, "cvs_cs_sdm_pu"},    /* Current sense ADC power up when cvs_use_direct_ctrls is set to 1, */\
    { 0xd520, "cvs_vs_itf_pu"},    /* Voltage sense interface power up  when cvs_use_direct_ctrls is set to 1, */\
    { 0xd530, "cvs_vs_sdm_pu"},    /* Voltage sense ADC power up when cvs_use_direct_ctrls is set to 1, */\
-   { 0xd540, "cvs_vsitf_cssdm_connect"},    /* connect vs interface to cs sdm (test)             , */\
-   { 0xd550, "cvs_csitf_atb_connect"},    /* connect cs interface to atb (test)                , */\
-   { 0xd560, "cvs_vsitf_atb_connect"},    /* connect vs interface to atb (test)                , */\
-   { 0xd570, "cvs_vs_itf_short"},    /* short inputs of vs sdm (test)                     , */\
-   { 0xd580, "cvs_vstress_polarity"},    /* change polarity of integrator capacitors during vstress (test), */\
-   { 0xd590, "cvs_csls_polarity"},    /* swap polarity of low-side current sense inputs (test), */\
-   { 0xd5a0, "minion_pu"},    /* power up biasing of minion when amp_use_direct_ctrls is set to 1, */\
-   { 0xd600, "amp_pst_pu"},    /* power up biasing of AMP powerstage when amp_use_direct_ctrls is set to 1, */\
-   { 0xd610, "amp_apwm_pu"},    /* power up biasing of PWM generator when amp_use_direct_ctrls is set to 1, */\
-   { 0xd620, "amp_ciff_pu"},    /* power up biasing of CIFF integrators when amp_use_direct_ctrls is set to 1, */\
-   { 0xd630, "amp_tzdac_pu"},    /* power up biasing of True-Zero DAC when amp_use_direct_ctrls is set to 1, */\
-   { 0xd640, "amp_test_rc"},    /* testsignal ALF, capacitor-value related current to VATBP, a resitor to VATBN, */\
-   { 0xd650, "amp_test_vtriminmax"},    /* testsignal ALF, connect vtrimax to VATBP and vtrimin to VATBN, */\
-   { 0xd660, "amp_test_vlf"},    /* testsignal ALF, connect vlfp to VATBP and vlfn to VATBN, */\
-   { 0xd670, "amp_test_vref"},    /* testsignal ALF, connect vref_0v9_tzdac to VATBP and vref_0v9 to VATBN, */\
-   { 0xd680, "amp_dis_dem"},    /* disable generation of common-mode-feed-forward (CMFF) signals, */\
+   { 0xd540, "cvs_vsitf_cssdm_connect"},    /* Connect vs interface to cs sdm (test)             , */\
+   { 0xd550, "cvs_csitf_atb_connect"},    /* Connect cs interface to atb (test)                , */\
+   { 0xd560, "cvs_vsitf_atb_connect"},    /* Connect vs interface to atb (test)                , */\
+   { 0xd570, "cvs_vs_itf_short"},    /* Short inputs of vs sdm (test)                     , */\
+   { 0xd580, "cvs_vstress_polarity"},    /* Change polarity of integrator capacitors during vstress (test), */\
+   { 0xd590, "cvs_csls_polarity"},    /* Swap polarity of low-side current sense inputs (test), */\
+   { 0xd5a0, "minion_pu"},    /* Power up biasing of minion when amp_use_direct_ctrls is set to 1, */\
+   { 0xd5b1, "chn_en_reg_mult"},    /* Cvs channels enable                               , */\
+   { 0xd600, "amp_pst_pu"},    /* Power up biasing of AMP powerstage when amp_use_direct_ctrls is set to 1, */\
+   { 0xd610, "amp_apwm_pu"},    /* Power up biasing of PWM generator when amp_use_direct_ctrls is set to 1, */\
+   { 0xd620, "amp_ciff_pu"},    /* Power up biasing of CIFF integrators when amp_use_direct_ctrls is set to 1, */\
+   { 0xd630, "amp_tzdac_pu"},    /* Power up biasing of True-Zero DAC when amp_use_direct_ctrls is set to 1, */\
+   { 0xd640, "amp_test_rc"},    /* Testsignal ALF, capacitor-value related current to VATBP, a resitor to VATBN, */\
+   { 0xd650, "amp_test_vtriminmax"},    /* Testsignal ALF, connect vtrimax to VATBP and vtrimin to VATBN, */\
+   { 0xd660, "amp_test_vlf"},    /* Testsignal ALF, connect vlfp to VATBP and vlfn to VATBN, */\
+   { 0xd670, "amp_test_vref"},    /* Testsignal ALF, connect vref_0v9_tzdac to VATBP and vref_0v9 to VATBN, */\
+   { 0xd680, "amp_dis_dem"},    /* Disable generation of common-mode-feed-forward (CMFF) signals, */\
    { 0xd6a3, "amp_dtb"},    /* Signals selection of digital testbus              , */\
    { 0xd6e0, "amp_dtb_alf"},    /* Selection of loop filter DTB (never together with amp_dtb_pst!), */\
    { 0xd6f0, "amp_dtb_pst"},    /* Selection of power stage DTB (never together with amp_dtb_alf!), */\
-   { 0xd713, "amp_ciff_stress"},    /* testsignal ALF, CIFF integrator capacitor stress vector, */\
-   { 0xd750, "amp_test_bist"},    /* testsignal PST, enable CVI mode (single segment)  , */\
-   { 0xd760, "minion_test"},    /* testsignal MINION                                 , */\
-   { 0xd770, "amp_test_pstn"},    /* testsignal PST, enable test mode PST n-channel    , */\
-   { 0xd780, "amp_test_pstp"},    /* testsignal PST, enable test mode PST p-channel    , */\
-   { 0xd790, "amp_test_vstress"},    /* testsignal PST, enable Vstress (increase floating bias voltages), */\
-   { 0xd7a0, "atb_hv_vddp"},    /* testsignal PST, connect vddp_sense to vatb_hv     , */\
-   { 0xd7b0, "atb_hv_gndp"},    /* testsignal PST, connect gndp_sense to vatb_hv     , */\
-   { 0xd7d0, "amp_test_dis_occlip"},    /* debug signal ALF, disable clipping of tzdac input currents in case of overcurrent, */\
-   { 0xd800, "bst_bias_pu"},    /* power up biasing of controller and reference voltage generation when bst_use_direct_ctrls is set to 1, */\
-   { 0xd810, "qpump_pu"},    /* power up biasing of charge pump qpump_use_direct_ctrls is set to 1, */\
-   { 0xd820, "bst_timer_pu"},    /* power up biasing of timer in COT controller bst_use_direct_ctrls is set to 1, */\
-   { 0xd830, "bst_fbck_pu"},    /* power up biasing of feedback DAC in COT controller bst_use_direct_ctrls is set to 1, */\
-   { 0xd840, "bst_pst_pu"},    /* power up biasing of BST powerstage bst_use_direct_ctrls is set to 1, */\
-   { 0xd853, "bst_dtb"},    /* signal selection of digital testbus               , */\
-   { 0xd890, "bst_dtb_cot1"},    /* selection of control stage DTB (never together with rg_bst_dtb_pst!), */\
-   { 0xd8a0, "bst_dtb_cot2"},    /* selection of control stage DTB (never together with rg_bst_dtb_pst!), */\
-   { 0xd8b0, "bst_dtb_pst"},    /* selection of power stage DTB   (never together with rg_bst_dtb_cot!), */\
-   { 0xd8c0, "bst_test_pst"},    /* enable testmode PST (PST responds to da_bst_pst_in), */\
-   { 0xd8d0, "bst_test_bist"},    /* enable CVI mode (use powerFET as current source)  , */\
-   { 0xd8e0, "bst_test_ocp"},    /* toggle around OCP level in CVI mode               , */\
-   { 0xd8f0, "bst_test_vstress"},    /* enable vstress PST and Qpump                      , */\
-   { 0xd900, "atb_hv_vddb"},    /* connect VDDB to vatb_hv (TEST3)                   , */\
-   { 0xd910, "atb_hv_gndb"},    /* connect GNDB to vatb_hv (TEST3)                   , */\
-   { 0xd920, "bst_test_so"},    /* enable for self oscillating test mode             , */\
-   { 0xd970, "atb_vfbck"},    /* connect controller feedback node to ATBP output   , */\
-   { 0xd980, "bst_test_cot"},    /* timer test mode, forcing "aa_ton_reset" and "aa_toff_reset" to 0, */\
-   { 0xd990, "atb_vref_0v9"},    /* connect 0.9 V reference to ATBN output            , */\
-   { 0xd9a0, "atb_vref_ton"},    /* connect reference voltage for Ton to ATBN output  , */\
-   { 0xd9b0, "atb_vint_toff"},    /* connect Toff timer integration node to ATBP output, */\
-   { 0xd9c0, "atb_vint_ton"},    /* connect Ton timer integration node to ATBP output , */\
+   { 0xd713, "amp_ciff_stress"},    /* Testsignal ALF, CIFF integrator capacitor stress vector, */\
+   { 0xd750, "amp_test_bist"},    /* Testsignal PST, enable CVI mode (single segment)  , */\
+   { 0xd760, "minion_test"},    /* Testsignal MINION                                 , */\
+   { 0xd770, "amp_test_pstn"},    /* Testsignal PST, enable test mode PST n-channel    , */\
+   { 0xd780, "amp_test_pstp"},    /* Testsignal PST, enable test mode PST p-channel    , */\
+   { 0xd790, "amp_test_vstress"},    /* Testsignal PST, enable Vstress (increase floating bias voltages), */\
+   { 0xd7a0, "atb_hv_vddp"},    /* Testsignal PST, connect vddp_sense to vatb_hv     , */\
+   { 0xd7b0, "atb_hv_gndp"},    /* Testsignal PST, connect gndp_sense to vatb_hv     , */\
+   { 0xd7d0, "amp_test_dis_occlip"},    /* Debug signal ALF, disable clipping of tzdac input currents in case of overcurrent, */\
+   { 0xd800, "bst_bias_pu"},    /* Power up biasing of controller and reference voltage generation when bst_use_direct_ctrls is set to 1, */\
+   { 0xd810, "qpump_pu"},    /* Power up biasing of charge pump qpump_use_direct_ctrls is set to 1, */\
+   { 0xd820, "bst_timer_pu"},    /* Power up biasing of timer in COT controller bst_use_direct_ctrls is set to 1, */\
+   { 0xd830, "bst_fbck_pu"},    /* Power up biasing of feedback DAC in COT controller bst_use_direct_ctrls is set to 1, */\
+   { 0xd840, "bst_pst_pu"},    /* Power up biasing of BST powerstage bst_use_direct_ctrls is set to 1, */\
+   { 0xd853, "bst_dtb"},    /* Signal selection of digital testbus               , */\
+   { 0xd890, "bst_dtb_cot1"},    /* Selection of control stage DTB (never together with rg_bst_dtb_pst!), */\
+   { 0xd8a0, "bst_dtb_cot2"},    /* Selection of control stage DTB (never together with rg_bst_dtb_pst!), */\
+   { 0xd8b0, "bst_dtb_pst"},    /* Selection of power stage DTB   (never together with rg_bst_dtb_cot!), */\
+   { 0xd8c0, "bst_test_pst"},    /* Enable testmode PST (PST responds to da_bst_pst_in), */\
+   { 0xd8d0, "bst_test_bist"},    /* Enable CVI mode (use powerFET as current source)  , */\
+   { 0xd8e0, "bst_test_ocp"},    /* Toggle around OCP level in CVI mode               , */\
+   { 0xd8f0, "bst_test_vstress"},    /* Enable vstress PST and Qpump                      , */\
+   { 0xd900, "atb_hv_vddb"},    /* Connect VDDB to vatb_hv (TEST3)                   , */\
+   { 0xd910, "atb_hv_gndb"},    /* Connect GNDB to vatb_hv (TEST3)                   , */\
+   { 0xd920, "bst_test_so"},    /* Enable for self oscillating test mode             , */\
+   { 0xd970, "atb_vfbck"},    /* Connect controller feedback node to ATBP output   , */\
+   { 0xd980, "bst_test_cot"},    /* Timer test mode, forcing "aa_ton_reset" and "aa_toff_reset" to 0, */\
+   { 0xd990, "atb_vref_0v9"},    /* Connect 0.9 V reference to ATBN output            , */\
+   { 0xd9a0, "atb_vref_ton"},    /* Connect reference voltage for Ton to ATBN output  , */\
+   { 0xd9b0, "atb_vint_toff"},    /* Connect Toff timer integration node to ATBP output, */\
+   { 0xd9c0, "atb_vint_ton"},    /* Connect Ton timer integration node to ATBP output , */\
    { 0xd9d0, "qpump_test_vstress"},    /* Enable voltage stress test in Qpump flycap        , */\
    { 0xd9e0, "qpump_test_en"},    /* Enable Qpump test (freeze clocking)               , */\
    { 0xd9f0, "bst_lowdrivebias"},    /* Enable lowdrive bias                              , */\
-   { 0xda00, "bst_filterenable"},    /* enable singing capacitor effect filter in current DAC, */\
-   { 0xda10, "bst_intenable"},    /* enable for integrator in feedback                 , */\
-   { 0xda20, "bst_p2aenable"},    /* enable for peak-to-average compensation           , */\
-   { 0xda30, "amp_test_ocl"},    /* testsignal PST, enable OCP test low-side (single segment), */\
-   { 0xda40, "amp_test_och"},    /* testsignal PST, enable OCP test high-side (single segment), */\
-   { 0xdb00, "bgr_pu"},    /* power up biasing of BandGap Reference when ref_use_direct_ctrls is set to 1, */\
-   { 0xdb10, "buf_pu"},    /* power up biasing of reference voltage buffers when ref_use_direct_ctrls is set to 1, */\
-   { 0xdb20, "vsup_pu"},    /* power up biasing of supply sensor when ref_use_direct_ctrls is set to 1, */\
-   { 0xdb30, "bod_pu"},    /* power up biasing of Brown-Out Detector when ref_use_direct_ctrls is set to 1, */\
-   { 0xdb40, "atbp_test1"},    /* connect atbp to outside world (TEST1)             , */\
-   { 0xdb50, "atbn_test2"},    /* connect atbn to outside world (TEST2)             , */\
+   { 0xda00, "bst_filterenable"},    /* Enable singing capacitor effect filter in current DAC, */\
+   { 0xda10, "bst_intenable"},    /* Enable for integrator in feedback                 , */\
+   { 0xda20, "bst_p2aenable"},    /* Enable for peak-to-average compensation           , */\
+   { 0xda30, "amp_test_ocl"},    /* Testsignal PST, enable OCP test low-side (single segment), */\
+   { 0xda40, "amp_test_och"},    /* Testsignal PST, enable OCP test high-side (single segment), */\
+   { 0xdb00, "bgr_pu"},    /* Power up biasing of BandGap Reference when ref_use_direct_ctrls is set to 1, */\
+   { 0xdb10, "buf_pu"},    /* Power up biasing of reference voltage buffers when ref_use_direct_ctrls is set to 1, */\
+   { 0xdb20, "vsup_pu"},    /* Power up biasing of supply sensor when ref_use_direct_ctrls is set to 1, */\
+   { 0xdb30, "bod_pu"},    /* Power up biasing of Brown-Out Detector when ref_use_direct_ctrls is set to 1, */\
+   { 0xdb40, "atbp_test1"},    /* Connect atbp to outside world (TEST1)             , */\
+   { 0xdb50, "atbn_test2"},    /* Connect atbn to outside world (TEST2)             , */\
    { 0xdb60, "atbp_vref0v9"},    /* Connect bandgap voltage on ATBP(also for trimming), */\
    { 0xdb70, "atbn_gndd"},    /* Connect ground sense on ATBN (close to bandgap)   , */\
    { 0xdb80, "atbp_iref50u"},    /* Connect bias curent  on ATBP(for trim)            , */\
@@ -914,58 +936,58 @@ typedef enum tfa986xn2BfEnumList {
    { 0xdd00, "bst_ccm"},    /* Force Continuous Conduction Mode                  , */\
    { 0xdd11, "bst_fbgain"},    /* Gain selection for feedback signal                , */\
    { 0xdd33, "bst_coilselect"},    /* Booster coil value                                , */\
-   { 0xdd70, "amp_enable_clip_lpm"},    /* enable clipping of tzdac input currents in case of Low Power Mode, */\
-   { 0xdd80, "amp_enable_clip_pst"},    /* enable clipping of tzdac input currents in case Main PST is active, */\
-   { 0xdd90, "amp_dis_cmfb_lpm"},    /* disable common-mode feedback in case of Low Power Mode, */\
-   { 0xdda0, "amp_dis_cmfb_pst"},    /* disable common-mode feedback in case Main PST is active, */\
+   { 0xdd70, "amp_enable_clip_lpm"},    /* Enable clipping of tzdac input currents in case of Low Power Mode, */\
+   { 0xdd80, "amp_enable_clip_pst"},    /* Enable clipping of tzdac input currents in case Main PST is active, */\
+   { 0xdd90, "amp_dis_cmfb_lpm"},    /* Disable common-mode feedback in case of Low Power Mode, */\
+   { 0xdda0, "amp_dis_cmfb_pst"},    /* Disable common-mode feedback in case Main PST is active, */\
    { 0xde01, "sourcebst"},    /* Set BST source to                                 , */\
    { 0xde20, "invertbst"},    /* Invert pwma test signal                           , */\
    { 0xde36, "pulselength_bst"},    /* Pulse length setting test input for amplifier (PWM clock 2048/4096 Fs), */\
-   { 0xdf00, "bst_spare1"},    /* bst spare 1                                       , */\
-   { 0xdf10, "bst_spare2"},    /* bst spare 2                                       , */\
-   { 0xdf20, "bst_spare3"},    /* bst spare 3                                       , */\
-   { 0xdf30, "bst_spare4"},    /* bst spare 4                                       , */\
-   { 0xdf40, "bst_spare5"},    /* bst spare 5                                       , */\
-   { 0xdf50, "bst_spare6"},    /* bst spare 6                                       , */\
-   { 0xdf60, "bst_spare7"},    /* bst spare 7                                       , */\
-   { 0xdf70, "bst_spare8"},    /* bst spare 8                                       , */\
-   { 0xdf80, "bst_spare9"},    /* bst spare 9                                       , */\
-   { 0xdf90, "bst_spare10"},    /* bst spare 10                                      , */\
+   { 0xdf00, "bst_spare1"},    /* Bst spare 1                                       , */\
+   { 0xdf10, "bst_spare2"},    /* Bst spare 2                                       , */\
+   { 0xdf20, "bst_spare3"},    /* Bst spare 3                                       , */\
+   { 0xdf30, "bst_spare4"},    /* Bst spare 4                                       , */\
+   { 0xdf40, "bst_spare5"},    /* Bst spare 5                                       , */\
+   { 0xdf50, "bst_spare6"},    /* Bst spare 6                                       , */\
+   { 0xdf60, "bst_spare7"},    /* Bst spare 7                                       , */\
+   { 0xdf70, "bst_spare8"},    /* Bst spare 8                                       , */\
+   { 0xdf80, "bst_spare9"},    /* Bst spare 9                                       , */\
+   { 0xdf90, "bst_spare10"},    /* Bst spare 10                                      , */\
    { 0xe00f, "sw_profile"},    /* Software profile data                             , */\
    { 0xe10f, "sw_vstep"},    /* Software vstep information                        , */\
    { 0xf002, "cvs_vs_trim"},    /* Voltage sense trim offset of n-side               , */\
    { 0xf031, "cvs_sdm_offset"},    /* Programmed offset of OTA to push idle tones       , */\
-   { 0xf053, "amp_ciff_trim"},    /* trim capacitors of CIFF integrators               , */\
+   { 0xf053, "amp_ciff_trim"},    /* Trim capacitors of CIFF integrators               , */\
    { 0xf090, "disable_lpm"},    /* Disable low power mode                            , */\
    { 0xf0a5, "spare_f0_15_10"},    /* SPARE                                             , */\
-   { 0xf103, "amp_ochp_trim"},    /* trim OCP level AMP PST 2's compliment (key1 protected), */\
-   { 0xf143, "amp_ochn_trim"},    /* trim OCP level AMP PST 2's compliment (key1 protected), */\
-   { 0xf183, "amp_oclp_trim"},    /* trim OCP level AMP PST 2's compliment (key1 protected), */\
-   { 0xf1c3, "amp_ocln_trim"},    /* trim OCP level AMP PST 2's compliment (key1 protected), */\
-   { 0xf203, "bst_ocl_trim"},    /* trim OCP level (low side)                         , */\
-   { 0xf243, "bst_och_trim"},    /* trim OCP level (high side)                        , */\
-   { 0xf283, "bst_freqtrim"},    /* trim COT timer frequency                          , */\
-   { 0xf2c3, "bst_ip2atrim"},    /* trim bits for peak to average compensation (from Bandgap Reference I-trim), */\
-   { 0xf303, "bgr_vtrim"},    /* trim BGR 900mV reference voltage(2s-complement)   , */\
-   { 0xf343, "bgr_itrim"},    /* trim BGR reference current                        , */\
-   { 0xf382, "bgr_tctrim"},    /* trim BGR reference voltage temperature coefficient, */\
+   { 0xf103, "amp_ochp_trim"},    /* Trim OCP level AMP PST 2's compliment (key1 protected), */\
+   { 0xf143, "amp_ochn_trim"},    /* Trim OCP level AMP PST 2's compliment (key1 protected), */\
+   { 0xf183, "amp_oclp_trim"},    /* Trim OCP level AMP PST 2's compliment (key1 protected), */\
+   { 0xf1c3, "amp_ocln_trim"},    /* Trim OCP level AMP PST 2's compliment (key1 protected), */\
+   { 0xf203, "bst_ocl_trim"},    /* Trim OCP level (low side)                         , */\
+   { 0xf243, "bst_och_trim"},    /* Trim OCP level (high side)                        , */\
+   { 0xf283, "bst_freqtrim"},    /* Trim COT timer frequency                          , */\
+   { 0xf2c3, "bst_ip2atrim"},    /* Trim bits for peak to average compensation (from Bandgap Reference I-trim), */\
+   { 0xf303, "bgr_vtrim"},    /* Trim BGR 900mV reference voltage(2s-complement)   , */\
+   { 0xf343, "bgr_itrim"},    /* Trim BGR reference current                        , */\
+   { 0xf382, "bgr_tctrim"},    /* Trim BGR reference voltage temperature coefficient, */\
    { 0xf3b1, "type_selection"},    /* Type Selection                                    , */\
-   { 0xf407, "calibr_osc_delta_ndiv"},    /* clk_range_check calibration value (2s-complement) , */\
-   { 0xf482, "pll_cp_ib_trim"},    /* connect to rg_pl200m_cp_ib_trim, pl200m charge pump current bias trim code, */\
-   { 0xf4b2, "pll_vco_gm_rs_trim"},    /* connect to rg_pl200m_vco_gm_rs_trim, pl200m vco gm source resistor of gm selection word, */\
+   { 0xf407, "calibr_osc_delta_ndiv"},    /* Clk_range_check calibration value (2s-complement) , */\
+   { 0xf482, "pll_cp_ib_trim"},    /* Connect to rg_pl200m_cp_ib_trim, pl200m charge pump current bias trim code, */\
+   { 0xf4b2, "pll_vco_gm_rs_trim"},    /* Connect to rg_pl200m_vco_gm_rs_trim, pl200m vco gm source resistor of gm selection word, */\
    { 0xf4e0, "lock_bypass_clipper"},    /* Disable function bypass_clipper                   , */\
    { 0xf4f0, "lock_max_dcdc_voltage"},    /* Limit Max DCDC voltage                            , */\
    { 0xf507, "calibr_vout_offset"},    /* DCDC offset calibration 2's complement (key1 protected), */\
    { 0xf587, "temperature_coef_bg"},    /* temperature coefficient of the bandgap            , */\
    { 0xf603, "calibr_gain"},    /* HW gain module (2's complement)                   , */\
    { 0xf645, "calibr_offset"},    /* Offset for amplifier, HW gain module (2's complement), */\
-   { 0xf6a5, "adc11_gain_comp"},    /* adc11b gain compensation setting, compensate factor (2's complement), */\
+   { 0xf6a5, "adc11_gain_comp"},    /* Adc11b gain compensation setting, compensate factor (2's complement), */\
    { 0xf707, "calibr_cs_gain"},    /* Current sense gain (signed two's complement format), */\
    { 0xf787, "calibr_vs_gain"},    /* Voltage sense VS gain calibration                 , */\
    { 0xf806, "htol_iic_addr"},    /* 7-bit I2C address to be used during HTOL testing  , */\
    { 0xf870, "htol_iic_addr_en"},    /* HTOL I2C address enable control                   , */\
    { 0xf887, "calibr_temp_offset"},    /* Temperature offset 2's compliment (key1 protected), */\
-   { 0xf907, "Temperature_coef_temp_sensor"},    /* temperature coefficient of the temperature sensor , */\
+   { 0xf907, "Temperature_coef_temp_sensor"},    /* Temperature coefficient of the temperature sensor , */\
    { 0xf986, "calibr_temp_gain"},    /* Temperature gain 2's compliment (key1 protected)  , */\
    { 0xf9f0, "hot_test_stage_completed"},    /* Report status of hot test stage                   , */\
    { 0xfa0f, "efusedataA"},    /* EFUSEdataA (key1 protected)                       , */\

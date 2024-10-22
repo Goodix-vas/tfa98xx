@@ -33,7 +33,7 @@ extern "C" {
 #ifdef TFA98XX_GIT_VERSIONS
   #define TFA98XX_API_REV_STR TFA98XX_GIT_VERSIONS
 #else
-  #define TFA98XX_API_REV_STR "v6.13.0"
+  #define TFA98XX_API_REV_STR "v6.14.1"
 #endif
 
 #include "tfa_device.h"

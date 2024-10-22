@@ -3076,11 +3076,6 @@ static int tfa98xx_i2c_probe(struct i2c_client *i2c,
 			tfa98xx->flags |= TFA98XX_FLAG_CALIBRATION_CTL;
 			tfa98xx->flags |= TFA98XX_FLAG_TDM_DEVICE;
 			break;
-		case 0x65: /* tfa9865*/
-			pr_info("TFA9865 detected\n");
-			tfa98xx->flags |= TFA98XX_FLAG_TDM_DEVICE;
-			tfa98xx->flags |= TFA98XX_FLAG_OTP_TYPE_DEVICE;
-			break;
 		case 0x66: /* tfa986x*/
 			pr_info("TFA986x detected\n");
 			tfa98xx->flags |= TFA98XX_FLAG_TDM_DEVICE;
@@ -3269,7 +3264,6 @@ static struct of_device_id tfa98xx_dt_match[] = {
 	{.compatible = "tfa,tfa9875" },
 	{.compatible = "tfa,tfa9874" },
 	{.compatible = "tfa,tfa9878" },
-	{.compatible = "tfa,tfa9865" },
 	{.compatible = "tfa,tfa9888" },
 	{.compatible = "tfa,tfa9890" },
 	{.compatible = "tfa,tfa9891" },

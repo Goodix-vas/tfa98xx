@@ -1403,11 +1403,12 @@ static enum Tfa98xx_Error tfa986x_specific(struct tfa_device *tfa)
 
 	case 0x100b64:/**TFA9864 N2B0**/
 		/* ----- generated code start(V6) ----- */
-		/* -----  version 1 ----- */
+		/* -----  version 2 ----- */
 		tfa_reg_write(tfa, 0x00, 0xf241); //POR=0xf261
 		tfa_reg_write(tfa, 0x02, 0x0c28); //POR=0x0008
 		tfa_reg_write(tfa, 0x08, 0x009a); //POR=0x00d2
 		tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
+		tfa_reg_write(tfa, 0x54, 0x10e0); //POR=0x00e0
 		tfa_reg_write(tfa, 0x5a, 0x5f5e); //POR=0x36be
 		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
 		tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
@@ -1429,11 +1430,12 @@ static enum Tfa98xx_Error tfa986x_specific(struct tfa_device *tfa)
 
 	case 0x110b64:/**TFA9864 MN2B0**/
 		/* ----- generated code start(V6) ----- */
-		/* -----  version 1 ----- */
+		/* -----  version 2 ----- */
 		tfa_reg_write(tfa, 0x00, 0xf241); //POR=0xf261
 		tfa_reg_write(tfa, 0x02, 0x0c28); //POR=0x0008
 		tfa_reg_write(tfa, 0x08, 0x009a); //POR=0x00d2
 		tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
+		tfa_reg_write(tfa, 0x54, 0x10e0); //POR=0x00e0
 		tfa_reg_write(tfa, 0x5a, 0x5f5e); //POR=0x36be
 		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
 		tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
@@ -1455,11 +1457,12 @@ static enum Tfa98xx_Error tfa986x_specific(struct tfa_device *tfa)
 
 	case 0x200b65:/**TFA9865 N3B0**/
 		/* ----- generated code start(V6) ----- */
-		/* -----  version 1 ----- */
+		/* -----  version 2 ----- */
 		tfa_reg_write(tfa, 0x00, 0xf241); //POR=0xf261
 		tfa_reg_write(tfa, 0x02, 0x0c28); //POR=0x0008
 		tfa_reg_write(tfa, 0x08, 0x009a); //POR=0x00d2
 		tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
+		tfa_reg_write(tfa, 0x54, 0x10e0); //POR=0x00e0
 		tfa_reg_write(tfa, 0x5a, 0x5f5e); //POR=0x36be
 		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
 		tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
@@ -1480,11 +1483,12 @@ static enum Tfa98xx_Error tfa986x_specific(struct tfa_device *tfa)
 
 	case 0x110b65:/**TFA9865 MN2B0**/
 		/* ----- generated code start(V6) ----- */
-		/* -----  version 1 ----- */
+		/* -----  version 2 ----- */
 		tfa_reg_write(tfa, 0x00, 0xf241); //POR=0xf261
 		tfa_reg_write(tfa, 0x02, 0x0c28); //POR=0x0008
 		tfa_reg_write(tfa, 0x08, 0x009a); //POR=0x00d2
 		tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
+		tfa_reg_write(tfa, 0x54, 0x10e0); //POR=0x00e0
 		tfa_reg_write(tfa, 0x5a, 0x5f5e); //POR=0x36be
 		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
 		tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96

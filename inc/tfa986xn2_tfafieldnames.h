@@ -1,5 +1,5 @@
 /** Filename: tfa986xn2_tfafieldnames.h
- *  This file was generated automatically on 09/23/24 at 11:20:42. 
+ *  This file was generated automatically on 12/10/24 at 11:05:46. 
  *  Source file: TFA986xN2_GPA21_N2B0_I2C_RegisterMap.xlsx
  */
 
@@ -7,7 +7,7 @@
 #define _TFA986XN2_TFAFIELDNAMES_H
 
 
-#define TFA986XN2_I2CVERSION    9
+#define TFA986XN2_I2CVERSION    10
 
 typedef enum tfa986xn2BfEnumList {
     TFA986XN2_BF_PWDN  = 0x0000,    /*!< Powerdown selection                                */
@@ -1000,10 +1000,22 @@ typedef enum tfa986xn2BfEnumList {
 };
 
 enum tfa986xn2_irq {
+	tfa986xn2_irq_stvdds = 0,
+	tfa986xn2_irq_stbstoc = 1,
+	tfa986xn2_irq_stotds = 2,
+	tfa986xn2_irq_stocpr = 3,
+	tfa986xn2_irq_stuvds = 4,
+	tfa986xn2_irq_sttdmer = 5,
+	tfa986xn2_irq_stnoclk = 6,
+	tfa986xn2_irq_stdcth = 7,
+	tfa986xn2_irq_stbodnok = 8,
+	tfa986xn2_irq_stcoor = 9,
+	tfa986xn2_irq_stovds = 10,
+	tfa986xn2_irq_stqpfail = 11,
 	tfa986xn2_irq_max = -1,
 	tfa986xn2_irq_all = -1 /* all irqs */};
 
-#define TFA986XN2_IRQ_NAMETABLE tfaIrqName_t tfa986xn2_irq_names[]= {\
+#define TFA986XN2_IRQ_NAMETABLE static tfaIrqName_t tfa986xn2_irq_names[]= {\
 	{0, "STVDDS"},\
 	{1, "STBSTOC"},\
 	{2, "STOTDS"},\

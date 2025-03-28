@@ -1260,7 +1260,7 @@ static enum Tfa98xx_Error tfa986x_specific(struct tfa_device *tfa)
 			rev -= 1; /* 65 > 64 */
 	}
 
-	if ((rev & 0xff) == 0x66) {
+	if ((tfa->rev & 0xff) == 0x66) {
 		type = tfa_get_bf(tfa, 0x0687) & 0x3;
 
 		switch (type)
@@ -1282,6 +1282,7 @@ static enum Tfa98xx_Error tfa986x_specific(struct tfa_device *tfa)
 	}
 
 	tfa->revid = rev;
+	pr_debug("revid 0x%08x\n", tfa->revid);
 
 	if (tfa->in_use == 0)
 		return Tfa98xx_Error_NotOpen;

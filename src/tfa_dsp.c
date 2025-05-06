@@ -40,6 +40,7 @@
 #define MAX_BATT_LEVEL 670
 void tfanone_ops(struct tfa_device_ops *ops);
 void tfa986x_ops(struct tfa_device_ops *ops);
+void tfa9867_ops(struct tfa_device_ops *ops);
 void tfa9872_ops(struct tfa_device_ops *ops);
 void tfa9873_ops(struct tfa_device_ops *ops);
 void tfa9874_ops(struct tfa_device_ops *ops);
@@ -383,6 +384,16 @@ void tfa_set_query_info(struct tfa_device *tfa)
 		tfa->advance_keys_handling = 1; /*artf65038*/
 		tfa->daimap = Tfa98xx_DAI_TDM;
 		tfa986x_ops(&tfa->dev_ops); /* register device operations */
+		break;
+	case 0x67:
+		/* tfa9867 */
+		tfa->supportDrc = supportYes;
+		tfa->tfa_family = 2;
+		tfa->spkr_count = 1;
+		tfa->is_probus_device = 1;
+		tfa->advance_keys_handling = 1; /*artf65038*/
+		tfa->daimap = Tfa98xx_DAI_TDM;
+		tfa9867_ops(&tfa->dev_ops); /* register device operations */
 		break;
 	case 0x72:
 		/* tfa9872 */

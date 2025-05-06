@@ -39,6 +39,7 @@
 #define MIN_BATT_LEVEL 640
 #define MAX_BATT_LEVEL 670
 void tfanone_ops(struct tfa_device_ops *ops);
+void tfd1015_ops(struct tfa_device_ops *ops);
 void tfa986x_ops(struct tfa_device_ops *ops);
 void tfa9867_ops(struct tfa_device_ops *ops);
 void tfa9872_ops(struct tfa_device_ops *ops);
@@ -374,6 +375,16 @@ void tfa_set_query_info(struct tfa_device *tfa)
 		tfa->daimap = 0;
 		tfanone_ops(&tfa->dev_ops); /* register device operations via tfa hal*/
 		tfa->bus = 1;
+		break;
+	case 0x15:
+		/* tfd1015 */
+		tfa->supportDrc = supportYes;
+		tfa->tfa_family = 2;
+		tfa->spkr_count = 1;
+		tfa->is_probus_device = 1;
+		tfa->advance_keys_handling = 1; /*artf65038*/
+		tfa->daimap = Tfa98xx_DAI_TDM;
+		tfd1015_ops(&tfa->dev_ops); /* register device operations */
 		break;
 	case 0x66:
 		/* tfa986x */
@@ -3991,7 +4002,7 @@ int tfa_dev_probe(int slave, struct tfa_device *tfa)
 		return -1;
 	}
 
-	if ( (rev >> 8) == 0x98 ) /* new family has 0x98 in rev MSB */
+	if (((rev >> 8) == 0x98) || ((rev >> 8) == 0x10))		/* new family has 0x98 in rev MSB */
 	{
 		/*overwriteing tfa->rev MSB with the revision number to match with older devices representation*/
 		if (tfa98xx_read_register16(tfa, 6, &reg_6) != Tfa98xx_Error_Ok) {

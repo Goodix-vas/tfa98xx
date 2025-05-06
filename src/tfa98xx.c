@@ -3043,6 +3043,11 @@ static int tfa98xx_i2c_probe(struct i2c_client *i2c,
 			return -EIO;
 		}
 		switch (reg & 0xff) {
+		case 0x15: /* tfd1015*/
+			pr_info("TFD1015 detected\n");
+			tfa98xx->flags |= TFA98XX_FLAG_TDM_DEVICE;
+			tfa98xx->flags |= TFA98XX_FLAG_OTP_TYPE_DEVICE;
+			break;
 		case 0x72: /* tfa9872 */
 			pr_info("TFA9872 detected\n");
 			tfa98xx->flags |= TFA98XX_FLAG_MULTI_MIC_INPUTS;

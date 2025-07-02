@@ -33,7 +33,7 @@ extern "C" {
 #ifdef TFA98XX_GIT_VERSIONS
   #define TFA98XX_API_REV_STR TFA98XX_GIT_VERSIONS
 #else
-  #define TFA98XX_API_REV_STR "v6.16.0"
+  #define TFA98XX_API_REV_STR "v6.17.0"
 #endif
 
 #include "tfa_device.h"
@@ -41,7 +41,7 @@ extern "C" {
 /*
  * data previously defined in Tfa9888_dsp.h
  */
-#define MEMTRACK_MAX_WORDS           251
+#define MEMTRACK_MAX_WORDS           269
 #define LSMODEL_MAX_WORDS            150
 #define TFA98XX_MAXTAG              (150)
 #define FW_VAR_API_VERSION          (521)

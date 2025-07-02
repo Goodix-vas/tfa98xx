@@ -1467,7 +1467,7 @@ static enum Tfa98xx_Error tfa9867_specific(struct tfa_device *tfa)
 		
 	case 0x0b67: /* Initial revision ID TFA9867 N1B0 */
 		/* ----- generated code start(V6) ----- */
-		/* -----  version 3 ----- */
+		/* -----  version 4 ----- */
 		tfa_reg_write(tfa, 0x00, 0xf241); //POR=0xf261
 		tfa_reg_write(tfa, 0x08, 0x007a); //POR=0x00d2
 		tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
@@ -1491,7 +1491,7 @@ static enum Tfa98xx_Error tfa9867_specific(struct tfa_device *tfa)
 		
 	case 0x1b67: /* Initial revision ID TFA9867 N1B1 */
 		/* ----- generated code start(V6) ----- */
-		/* -----  version 4 ----- */
+		/* -----  version 5 ----- */
 		tfa_reg_write(tfa, 0x00, 0xf241); //POR=0xf261
 		tfa_reg_write(tfa, 0x08, 0x007a); //POR=0x00d2
 		tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000

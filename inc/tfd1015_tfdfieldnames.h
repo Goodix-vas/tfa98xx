@@ -1013,4 +1013,22 @@ enum tfd1015_irq {
 	{13, "STOVVDDP"},\
 	{14, "14"},\
 }
+
+#define TFD1015_IRQ_NAMETABLE_IE_ORDER static tfaIrqName_t tfd1015_irq_names_ie_order[]= {\
+	{0, "STVDDS"},\
+	{1, "STUVVDDIO"},\
+	{2, "STOTDS"},\
+	{3, "STOCPR"},\
+	{4, "STUVDS"},\
+	{5, "STTDMER"},\
+	{6, "STNOCLK"},\
+	{7, "STDCTH"},\
+	{8, "STBODNOK"},\
+	{9, "STCOOR"},\
+	{10, "STOVDS"},\
+	{11, "STQPFAIL"},\
+	{12, "STUVVDDP"},\
+	{13, "STOVVDDP"},\
+	{14, "14"},\
+}
 #endif /* _TFD1015_TFDFIELDNAMES_H */

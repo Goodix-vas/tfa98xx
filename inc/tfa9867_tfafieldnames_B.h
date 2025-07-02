@@ -7,7 +7,7 @@
  *
  */
 /** Filename: tfa9867_tfafieldnames.h
- *  This file was generated automatically on 04/28/25 at 20:22:08. 
+ *  This file was generated automatically on 06/09/25 at 14:31:53. 
  *  Source file: TFA9867_GPA3_N1B1_I2C_RegisterMap.xlsx
  */
 
@@ -15,7 +15,7 @@
 #define _TFA9867_TFAFIELDNAMES_B_H
 
 
-#define TFA9867B_I2CVERSION    4
+#define TFA9867B_I2CVERSION    5
 
 typedef enum tfa9867BBfEnumList {
     TFA9867B_BF_PWDN  = 0x0000,    /*!< Powerdown selection                                */

@@ -238,6 +238,26 @@ int tfa_irq_set_pol(struct tfa_device *tfa, enum tfa9912_irq bit, int state)
 	return 0;
 }
 
+static char *tfatfd_irq_info[] = {
+	"Power on reset",
+	"Undervoltage VDDIO",
+	"Overtemperature",
+	"Overcurrent amp",
+	"Undervoltage",
+	"TDM error",
+	"Lost clock",
+	"DC too high amp",
+	"Brown out VDDD",
+	"Clock out of range",
+	"Overvoltage protection",
+	"Qpump fail"
+	"Overvoltage protection",
+	"Qpump fail",
+	"Undervoltage VDDP",
+	"Overvoltage VDDP"};
+
+TFD1015_IRQ_NAMETABLE_IE_ORDER;
+
 /* new interrupt functions for non-coolflux devices not using tfa9912_irq defs */
 static char *tfa986x_irq_info[] = {
 	"Power on reset",
@@ -299,6 +319,12 @@ int tfa_irq_report(struct tfa_device *tfa)
 		irq_names = Tfa9878IrqNames;
 		irq_info = tfa987x_irq_info;
 	} 
+	else if (tfa->revid == 0x00000a15)
+	{
+		irq_max = ARRAY_SIZE(tfatfd_irq_info);
+		irq_names = tfd1015_irq_names_ie_order;
+		irq_info = tfatfd_irq_info;
+	}
 	else
 	{
 		irq_max = ARRAY_SIZE(tfa986x_irq_info);
@@ -4087,7 +4113,7 @@ enum tfa_error tfa_dev_set_state(struct tfa_device *tfa, enum tfa_state state, i
 										* Disable MTP clock to protect memory.
 										* However in case of calibration wait for DSP! (This should be case only during calibration).
 										*/
-		if (TFA_GET_BF(tfa, MTPOTC) == 1 && tfa->tfa_family == 2) {
+		if (tfa->tfa_family == 2 && ((tfa->rev & 0xff) != 0x66) && ((tfa->rev & 0xff) != 0x67) && TFA_GET_BF(tfa, MTPOTC) == 1 && is_calibration) {
 			count = MTPEX_WAIT_NTRIES * 4; /* Calibration takes a lot of time */
 			while ((TFA_GET_BF(tfa, MTPEX) != 1) && count) {
 				msleep_interruptible(10);

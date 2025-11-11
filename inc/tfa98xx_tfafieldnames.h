@@ -68,6 +68,9 @@ typedef struct TfaIrqName {
 /* missing 'common' defs break the build */
 #define TFA2_BF_CFSM -1
 
+/* KEY1 access register */
+#define TFA1_BF_KEY1 0x0b07
+#define TFA2_BF_KEY1 0xa007
 
 /* MTP access uses registers
  *  defs are derived from corresponding bitfield names as used in the BF macros

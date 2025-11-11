@@ -33,7 +33,7 @@ extern "C" {
 #ifdef TFA98XX_GIT_VERSIONS
   #define TFA98XX_API_REV_STR TFA98XX_GIT_VERSIONS
 #else
-  #define TFA98XX_API_REV_STR "v6.17.0"
+  #define TFA98XX_API_REV_STR "v6.17.1"
 #endif
 
 #include "tfa_device.h"
@@ -356,6 +356,14 @@ enum Tfa98xx_Error tfa98xx_select_stereo_gain_channel(struct tfa_device *tfa,
  */
 enum Tfa98xx_Error tfa98xx_set_mtp(struct tfa_device *tfa, uint16_t value, uint16_t mask);
 enum Tfa98xx_Error tfa98xx_get_mtp(struct tfa_device *tfa, uint16_t *value);
+
+/**
+ * lock or unlock KEY1
+ * lock = 1 will lock
+ * lock = 0 will unlock
+ * note that on return all the hidden key will be off
+ */
+void tfa98xx_key1(struct tfa_device* tfa, int lock);
 
 /**
  * lock or unlock KEY2

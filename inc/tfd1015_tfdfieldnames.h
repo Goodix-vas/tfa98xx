@@ -7,7 +7,7 @@
  *
  */
 /** Filename: tfd1015_tfdfieldnames.h
- *  This file was generated automatically on 03/27/25 at 13:09:44. 
+ *  This file was generated automatically on 07/21/25 at 17:52:46. 
  *  Source file: TFD1015_SORA1_N1A0_I2C_RegisterMap.xlsx
  */
 
@@ -15,7 +15,7 @@
 #define _TFD1015_TFDFIELDNAMES_H
 
 
-#define TFD1015_I2CVERSION    20
+#define TFD1015_I2CVERSION    21
 
 typedef enum tfd1015BfEnumList {
     TFD1015_BF_PWDN  = 0x0000,    /*!< Powerdown selection                                */

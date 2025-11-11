@@ -964,6 +964,26 @@ enum Tfa98xx_Error tfa98xx_get_mtp(struct tfa_device *tfa, uint16_t *value)
 	return Tfa98xx_Error_Ok;
 }
 
+/**
+ * lock or unlock KEY1
+ * lock = 1 will lock
+ * lock = 0 will unlock
+ * note that on return all the hidden key will be off
+ */
+void tfa98xx_key1(struct tfa_device* tfa, int lock)
+{
+	unsigned short value=0, xor=0;
+	/* unhide lock registers */
+	tfa_reg_write(tfa, (tfa->tfa_family == 1) ? 0x40 : 0x0F, 0x5A6B);
+	/* lock/unlock key1 */
+	tfa_reg_read(tfa, 0xFB, &value);
+	xor = value ^ 0x005A;
+	TFA_WRITE_REG(tfa, KEY1, lock ? 0 : xor);
+	/* hide lock registers */
+	if (!tfa->advance_keys_handling) /*artf65038*/
+		tfa_reg_write(tfa, (tfa->tfa_family == 1) ? 0x40 : 0x0F, 0);
+}
+
 /*
  * lock or unlock KEY2
  *  lock = 1 will lock
@@ -977,7 +997,7 @@ void tfa98xx_key2(struct tfa_device *tfa, int lock)
 	tfa_reg_write(tfa, (tfa->tfa_family == 1) ? 0x40 : 0x0F, 0x5A6B);
 	/* lock/unlock key2 MTPK */
 	TFA_WRITE_REG(tfa, MTPKEY2, lock ? 0 : 0x5A);
-	/* unhide lock registers */
+	/* hide lock registers */
 	if (!tfa->advance_keys_handling) /*artf65038*/
 		tfa_reg_write(tfa, (tfa->tfa_family == 1) ? 0x40 : 0x0F, 0);
 }
@@ -3168,8 +3188,10 @@ enum Tfa98xx_Error tfaRunStartup(struct tfa_device *tfa, int profile)
 		TFA_SET_BF(tfa, AUDFS, audfs);
 		TFA_SET_BF(tfa, FRACTDEL, fractdel);
 #ifdef __KERNEL__		
-	if ((tfa->dynamicTDMmode == 3) && tfa_dev_set_tdm_bitwidth(tfa,tfa->bitwidth))
-		return Tfa98xx_Error_Fail;
+		if ((tfa->dynamicTDMmode == 3) && tfa_dev_set_tdm_bitwidth(tfa, tfa->bitwidth)) {
+			err = Tfa98xx_Error_Fail;
+			goto lock_keys;
+		}
 #endif//	
 	}
 	else {
@@ -3199,6 +3221,11 @@ enum Tfa98xx_Error tfaRunStartup(struct tfa_device *tfa, int profile)
 	tfa_dev_set_state(tfa, TFA_STATE_INIT_CF, strstr(tfaContProfileName(tfa->cnt, tfa->dev_idx, profile), ".cal") != NULL);
 
 	err = tfa_show_current_state(tfa);
+
+lock_keys:
+	/* Lock back key1 and key2 */
+	tfa98xx_key2(tfa, 1);
+	tfa98xx_key1(tfa, 1);
 
 	return err;
 }

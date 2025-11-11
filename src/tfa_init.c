@@ -1821,7 +1821,7 @@ static enum Tfa98xx_Error tfa986x_specific(struct tfa_device *tfa)
 
 	case 0x110b64:/**TFA9864 MN2B0**/
 		/* ----- generated code start(V6) ----- */
-		/* -----  version 2 ----- */
+		/* -----  version 3 ----- */
 		tfa_reg_write(tfa, 0x00, 0xf241); //POR=0xf261
 		tfa_reg_write(tfa, 0x02, 0x0c28); //POR=0x0008
 		tfa_reg_write(tfa, 0x08, 0x009a); //POR=0x00d2

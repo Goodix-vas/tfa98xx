@@ -22,6 +22,21 @@
 /* module globals */
 static uint8_t gslave_address = 0; /* This is used to SET the slave with the --slave option */
 
+/*
+ * tfa bitfield name tables
+ */
+TFA986X_NAMETABLE
+TFA986XN2_NAMETABLE
+TFA9867_NAMETABLE
+TFA9867B_NAMETABLE
+TFD1015_NAMETABLE
+
+TFA986X_BITNAMETABLE
+TFA986XN2_BITNAMETABLE
+TFA9867_BITNAMETABLE
+TFA9867B_BITNAMETABLE
+TFD1015_BITNAMETABLE
+
 static int float_to_int(uint32_t x)
 {
 	unsigned e = (0x7F + 31) - ((*(unsigned *)&x & 0x7F800000) >> 23);
@@ -2445,3 +2460,90 @@ int tfa_tib_dsp_msgmulti(struct tfa_device *tfa, int length, const char *buffer)
 
 	return 0;
 }
+
+/**
+ * lookup name in table
+ *   return 0xffff if not found
+ */
+static uint16_t tfa_name2bf(tfaBfName_t* table, const  char* name) {
+	int n = 0;
+
+	do {
+		if (strcasecmp(name, table[n].bfName) == 0)
+			return table[n].bfEnum;
+	} while (table[n++].bfEnum != 0xffff);
+
+	return 0xffff;
+}
+
+/**
+ * get the bitfield number corresponding to the bitfield name
+ * @param name is the bitfield name for which to get the bitfield number
+ * @param revid is the 32-bit device type
+ */
+uint16_t tfaContBfEnumByNameRevid(const char* name, unsigned int revid)
+{
+	uint16_t bfnum = 0xffff;
+
+	switch (revid & 0xff) {
+	case 0x15:	// TFD1015Nx
+		bfnum = tfa_name2bf(Tfd1015DatasheetNames, name);
+		if (bfnum == 0xffff)
+			bfnum = tfa_name2bf(Tfd1015BitNames, name);
+		break;
+	case 0x64:	// Initial 64 or the 66 Nx variants
+	case 0x65:	// Initial 65 or the 66 Nx variants
+		switch (revid) {
+		case 0x00002A65:
+		case 0x00000C65:
+		case 0x00001C65:
+		case 0x00003C65:
+		case 0x00004C65:
+		case 0x00000C64:
+		case 0x00001C64:
+		case 0x00003C64:
+		case 0x00004C64:
+			// Initial 65/64
+			break;
+		default:
+			// 66 Nx variants (65/64 N/MN)
+			if  (((revid & 0x00f00000) == 0x00000000) ||								// 66N1 variants (65/64 N1/MN1)
+				(((revid & 0x00ff0000) == 0x00100000) && ((revid & 0xff) == 0x65)))	{	// 66N1 variant  (65 N2)
+				// 66N1 variants (65/64 N1/MN1, 65 N2)
+				bfnum = tfa_name2bf(Tfa986xDatasheetNames, name);
+				if (bfnum == 0xffff)
+					bfnum = tfa_name2bf(Tfa986xBitNames, name);
+			} else if (((revid & 0x00f00000) == 0x00100000) ||								// 66N2 variants (65/64 N2/MN2)
+					  (((revid & 0x00ff0000) == 0x00200000) && ((revid & 0xff) == 0x65))) {	// 66N2 variant  (65 N3)
+				// 66N2 variants (65/64 N2/MN2, 65 N3)
+				bfnum = tfa_name2bf(Tfa986xn2DatasheetNames, name);
+				if (bfnum == 0xffff)
+					bfnum = tfa_name2bf(Tfa986xn2BitNames, name);
+			}
+			break;
+		}
+		break;
+	case 0x67:	// 67Nx
+		switch (revid) {
+		case 0x00000a67:
+			bfnum = tfa_name2bf(Tfa9867DatasheetNames, name);
+			if (bfnum == 0xffff)
+				bfnum = tfa_name2bf(Tfa9867BitNames, name);
+			break;
+		case 0x00000b67:
+		case 0x00001b67:
+			bfnum = tfa_name2bf(Tfa9867BDatasheetNames, name);
+			if (bfnum == 0xffff)
+				bfnum = tfa_name2bf(Tfa9867BBitNames, name);
+			break;
+		}
+		break;
+	default:
+		/* Not yet supported for other revid */
+		bfnum = 0xffff;
+		break;
+	}
+
+	return bfnum;
+}
+

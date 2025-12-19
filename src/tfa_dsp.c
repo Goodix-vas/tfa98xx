@@ -3517,6 +3517,20 @@ error_exit:
 enum tfa_error tfa_dev_stop(struct tfa_device *tfa)
 {
 	enum Tfa98xx_Error err = Tfa98xx_Error_Ok;
+	int bSetAmpDirCtrls = 0;
+	int isLocked = 0;
+	uint16_t bf_amp_idle_not = tfaContBfEnumByNameRevid("amp_idle_not", tfa->revid);
+	uint16_t bf_amp_use_direct_ctrls = tfaContBfEnumByNameRevid("amp_use_direct_ctrls", tfa->revid);
+
+	/* If amp_idle_not is set, then set the amp_use_direct_ctrls after powerdown */
+	if (bf_amp_idle_not != 0xffff && 
+		bf_amp_use_direct_ctrls != 0xffff &&
+		tfa_get_bf(tfa, bf_amp_idle_not) == 1) {
+		bSetAmpDirCtrls = 1;
+		isLocked = tfa_get_bf(tfa, TFA2_BF_KEY1LOCKED);
+		if (isLocked)
+			tfa98xx_key1(tfa, 0); /* unlock */
+	}
 
 	/* mute */
 	tfaRunMute(tfa);
@@ -3527,10 +3541,17 @@ enum tfa_error tfa_dev_stop(struct tfa_device *tfa)
 	/* powerdown CF */
 	err = tfa98xx_powerdown(tfa, 1);
 	if (err != Tfa98xx_Error_Ok)
-		return err;
+		goto exit_with_error;
 
 	/* disable I2S output on TFA1 devices without TDM */
 	err = tfa98xx_aec_output(tfa, 0);
+
+	if (bSetAmpDirCtrls)
+		tfa_set_bf(tfa, bf_amp_use_direct_ctrls, 1);
+
+exit_with_error:
+	if (isLocked)
+		tfa98xx_key1(tfa, 1); /* lock back */
 
 	return err;
 }
@@ -4088,6 +4109,8 @@ enum tfa_error tfa_dev_set_state(struct tfa_device *tfa, enum tfa_state state, i
 	enum tfa_error err = tfa_error_ok;
 	int loop = 50, ready = 0;
 	int count;
+	uint16_t bf_amp_idle_not = 0xffff;
+	uint16_t bf_amp_use_direct_ctrls = 0xffff;
 
 	/* Base states */
 	/* Do not change the order of setting bits as this is important! */
@@ -4128,8 +4151,23 @@ enum tfa_error tfa_dev_set_state(struct tfa_device *tfa, enum tfa_state state, i
 	case TFA_STATE_INIT_FW:      /* DSP framework active (~patch loaded) */
 		break;
 	case TFA_STATE_OPERATING:    /* Amp and Algo running */
-								 /* Depending on our previous state we need to set 3 bits */
+		/* Depending on our previous state we need to set 3 bits */
 		TFA_SET_BF(tfa, PWDN, 0);	/* Coming from state 0 */
+
+		/* If amp_idle_not is set, then reset the amp_use_direct_ctrls after powerup */
+		bf_amp_idle_not = tfaContBfEnumByNameRevid("amp_idle_not", tfa->revid);
+		bf_amp_use_direct_ctrls = tfaContBfEnumByNameRevid("amp_use_direct_ctrls", tfa->revid);
+		if (bf_amp_idle_not != 0xffff &&
+			bf_amp_use_direct_ctrls != 0xffff &&
+			tfa_get_bf(tfa, bf_amp_idle_not) == 1) {
+			int isLocked = tfa_get_bf(tfa, TFA2_BF_KEY1LOCKED);
+			if (isLocked)
+				tfa98xx_key1(tfa, 0); /* unlock */
+			tfa_set_bf(tfa, bf_amp_use_direct_ctrls, 0);
+			if (isLocked)
+				tfa98xx_key1(tfa, 1); /* lock back */
+		}
+
 		TFA_SET_BF(tfa, MANSCONF, 1);	/* Coming from state 1 */
 		if (!tfa->is_probus_device)
 			TFA_SET_BF(tfa, SBSL, 1);	/* Coming from state 6 */

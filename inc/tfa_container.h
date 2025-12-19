@@ -363,4 +363,11 @@ int tfa_cnt_get_patch_version(struct tfa_device *tfa);
 
 int tfa_tib_dsp_msgmulti(struct tfa_device *tfa, int length, const char *buffer);
 
+/**
+ * get the bitfield number corresponding to the bitfield name
+ * @param name is the bitfield name for which to get the bitfield number
+ * @param revid is the 32-bit device type
+ */
+uint16_t tfaContBfEnumByNameRevid(const char* name, unsigned int revid);
+
 #endif /* TFACONTAINER_H_ */

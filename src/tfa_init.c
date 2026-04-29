@@ -1229,6 +1229,237 @@ void tfa9875_ops(struct tfa_device_ops *ops)
 
 
 /***********************************************************************************/
+/* TFA9861                                                                        */
+/***********************************************************************************/
+
+static enum Tfa98xx_Error tfa9861_specific(struct tfa_device *tfa)
+{
+	enum Tfa98xx_Error error = Tfa98xx_Error_Ok;
+	unsigned short value, xor, rc;
+	unsigned short irqmask;
+	
+    if ((tfa->rev & 0xff) == 0x61 && (tfa_get_bf(tfa, 0xf290)==0x0)) {
+        tfa->rev = (tfa->rev & 0xFFFFFF00) | 0x63; // 61 -> 63
+    }
+	
+	tfa->revid = tfa->rev;
+	
+	pr_debug("revid 0x%08x\n", tfa->revid);
+	if (tfa->in_use == 0)
+		return Tfa98xx_Error_NotOpen;
+
+	tfa_set_bf(tfa, TFA9861_BF_PWDN, 0);
+	tfa_set_bf(tfa, TFA9861_BF_MANAOOSC, 0);
+		
+	rc = tfa_wait4manstate(tfa, TFA9861_BF_MANSTATE, 1, 50);
+	if (rc < 0) {
+		pr_err("Error, waiting powerdown leaving\n");
+		return rc;
+	}
+
+	/* Unlock key 1 and 2 */
+	error = tfa_reg_write(tfa, 0x0F, 0x5A6B);
+	error = tfa_reg_read(tfa, 0xFB, &value);
+	xor = value ^ 0x005A;
+	error = tfa_reg_write(tfa, 0xA0, xor);
+	tfa98xx_key2(tfa, 0);
+
+	switch (tfa->revid) {
+	case 0x0a61: /* Initial revision ID TFA9861 N1A0 */
+		/* ----- generated code start(V6) ----- */
+		/* -----  version 23 ----- */
+		tfa_reg_write(tfa, 0x02, 0x0c78); //POR=0x0008
+		tfa_reg_write(tfa, 0x04, 0x8740); //POR=0x0740
+		tfa_reg_write(tfa, 0x07, 0x00c0); //POR=0x0048
+		tfa_reg_write(tfa, 0x08, 0x00c2); //POR=0x009a
+		tfa_reg_write(tfa, 0x58, 0x1001); //POR=0x0000
+		tfa_reg_write(tfa, 0x5a, 0x5f40); //POR=0x36a0
+		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
+		tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
+		tfa_reg_write(tfa, 0x5d, 0x1138); //POR=0x0ef8
+		tfa_reg_write(tfa, 0x63, 0x805b); //POR=0x9062
+		tfa_reg_write(tfa, 0x64, 0x020a); //POR=0x000b
+		tfa_reg_write(tfa, 0x74, 0x60bc); //POR=0x6014
+		tfa_reg_write(tfa, 0x75, 0x3daa); //POR=0x49e0
+		tfa_reg_write(tfa, 0x7b, 0x006d); //POR=0x0045
+		tfa_reg_write(tfa, 0xb1, 0x0000); //POR=0x000f
+		tfa_reg_write(tfa, 0xd9, 0x8000); //POR=0x0000
+		/* ----- generated code end   ----- */
+		break;
+	case 0x1a61: /* Initial revision ID TFA9861 N1A1 */
+		/* ----- generated code start(V6) ----- */
+		/* -----  version 4 ----- */
+		tfa_reg_write(tfa, 0x02, 0x0c78); //POR=0x0008
+		tfa_reg_write(tfa, 0x04, 0x8740); //POR=0x0740
+		tfa_reg_write(tfa, 0x07, 0x00c0); //POR=0x0048
+		tfa_reg_write(tfa, 0x08, 0x00c2); //POR=0x009a
+		tfa_reg_write(tfa, 0x58, 0x1001); //POR=0x0000
+		tfa_reg_write(tfa, 0x5a, 0x5f40); //POR=0x36a0
+		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
+		tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
+		tfa_reg_write(tfa, 0x5d, 0x1138); //POR=0x0ef8
+		tfa_reg_write(tfa, 0x63, 0x805b); //POR=0x9062
+		tfa_reg_write(tfa, 0x64, 0x020a); //POR=0x000b
+		tfa_reg_write(tfa, 0x74, 0x60bc); //POR=0x6014
+		tfa_reg_write(tfa, 0x75, 0x3daa); //POR=0x49e0
+		tfa_reg_write(tfa, 0x7b, 0x006d); //POR=0x0045
+		tfa_reg_write(tfa, 0xb1, 0x0000); //POR=0x000f
+		tfa_reg_write(tfa, 0xd9, 0x8000); //POR=0x0000
+		/* ----- generated code end   ----- */
+		break;
+	case 0x0a63: /* Initial revision ID TFA9863 N1A0 */
+		/* ----- generated code start(V6) ----- */
+		/* -----  version 2 ----- */
+		tfa_reg_write(tfa, 0x02, 0x0c78); //POR=0x0008
+		tfa_reg_write(tfa, 0x04, 0x8740); //POR=0x0740
+		tfa_reg_write(tfa, 0x07, 0x00c0); //POR=0x0048
+		tfa_reg_write(tfa, 0x08, 0x00c2); //POR=0x009a
+		tfa_reg_write(tfa, 0x52, 0x1400); //POR=0x1860
+		tfa_reg_write(tfa, 0x58, 0x1001); //POR=0x0000
+		tfa_reg_write(tfa, 0x5a, 0x5f40); //POR=0x36a0
+		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
+		tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
+		tfa_reg_write(tfa, 0x5d, 0x1138); //POR=0x0ef8
+		tfa_reg_write(tfa, 0x63, 0x805b); //POR=0x9062
+		tfa_reg_write(tfa, 0x64, 0x020b); //POR=0x000b
+		tfa_reg_write(tfa, 0x74, 0x60bc); //POR=0x6014
+		tfa_reg_write(tfa, 0x75, 0x3daa); //POR=0x49e0
+		tfa_reg_write(tfa, 0x76, 0xdf00); //POR=0xc200
+		tfa_reg_write(tfa, 0x7b, 0x006d); //POR=0x0045
+		tfa_reg_write(tfa, 0xb1, 0x0000); //POR=0x000f
+		tfa_reg_write(tfa, 0xcc, 0xf200); //POR=0xf000
+		tfa_reg_write(tfa, 0xd9, 0x8000); //POR=0x0000
+		/* ----- generated code end   ----- */
+		break;
+	case 0x1a63: /* Initial revision ID TFA9863 N1A1 */
+		/* ----- generated code start(V6) ----- */
+		/* -----  version 2 ----- */
+		tfa_reg_write(tfa, 0x02, 0x0c78); //POR=0x0008
+		tfa_reg_write(tfa, 0x04, 0x8740); //POR=0x0740
+		tfa_reg_write(tfa, 0x07, 0x00c0); //POR=0x0048
+		tfa_reg_write(tfa, 0x08, 0x00c2); //POR=0x009a
+		tfa_reg_write(tfa, 0x52, 0x1400); //POR=0x1860
+		tfa_reg_write(tfa, 0x58, 0x1001); //POR=0x0000
+		tfa_reg_write(tfa, 0x5a, 0x5f40); //POR=0x36a0
+		tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
+		tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
+		tfa_reg_write(tfa, 0x5d, 0x1138); //POR=0x0ef8
+		tfa_reg_write(tfa, 0x63, 0x805b); //POR=0x9062
+		tfa_reg_write(tfa, 0x64, 0x020b); //POR=0x000b
+		tfa_reg_write(tfa, 0x74, 0x60bc); //POR=0x6014
+		tfa_reg_write(tfa, 0x75, 0x3daa); //POR=0x49e0
+		tfa_reg_write(tfa, 0x76, 0xdf00); //POR=0xc200
+		tfa_reg_write(tfa, 0x7b, 0x006d); //POR=0x0045
+		tfa_reg_write(tfa, 0xb1, 0x0000); //POR=0x000f
+		tfa_reg_write(tfa, 0xcc, 0xf200); //POR=0xf000
+		tfa_reg_write(tfa, 0xd9, 0x8000); //POR=0x0000
+		/* ----- generated code end   ----- */
+		break;
+	default:
+		pr_info("\nWarning: Optimal settings not found for device with revid = 0x%x \n", tfa->revid);
+		break;
+	}
+
+	tfa_set_bf(tfa, TFA9861_BF_PWDN, 1); /* 1 = off */
+	rc = tfa_wait4manstate(tfa, TFA9861_BF_MANSTATE, 0, 50);
+	if (rc < 0)
+	{
+		pr_err("Timeout waiting for manstate 0\n");
+		return rc;
+	}
+	/* we come from reset state so turn off osc */
+	tfa_set_bf(tfa, TFA9861_BF_MANAOOSC, 1);
+
+	/* select error interrupts */
+	irqmask = (TFA_BF_MSK(TFA9861_BF_IEBSTOC) |
+				TFA_BF_MSK(TFA9861_BF_IEOTDS) |
+				TFA_BF_MSK(TFA9861_BF_IEOCPR) |
+				TFA_BF_MSK(TFA9861_BF_IEUVDS) |
+				TFA_BF_MSK(TFA9861_BF_IEBODNOK)|
+				TFA_BF_MSK(TFA9861_BF_IECOOR)|
+				TFA_BF_MSK(TFA9861_BF_IEOVDS));
+
+	tfa->interrupt_enable[0] = irqmask; /* save mask */
+	/* init irq regs */
+	tfa_irq_init(tfa);
+
+
+	return error;
+}
+
+static int tfa9861_set_bitfield(struct tfa_device* tfa, uint16_t bitfield, uint16_t value)
+{
+	if (((bitfield >> 8) & 0xff) == 0x10 || ((bitfield >> 8) & 0xff) == 0x13)
+		return tfa_set_bf_volatile(tfa, (uint16_t)bitfield, value);
+	else
+		return tfa_set_bf(tfa, (uint16_t)bitfield, value);
+}
+
+static int tfa9861_set_swprofile(struct tfa_device *tfa, unsigned short new_value)
+{
+	int active_value = tfa_dev_get_swprof(tfa);
+
+	/* Set the new value in the struct */
+	tfa->profile = new_value - 1;
+
+	/* Set the new value in the hw register */
+	tfa_set_bf_volatile(tfa, TFA9861_BF_SWPROFIL, new_value);
+
+	return active_value;
+}
+
+static int tfa9861_get_swprofile(struct tfa_device *tfa)
+{
+	return tfa_get_bf(tfa, TFA9861_BF_SWPROFIL) - 1;
+}
+
+static int tfa9861_set_swvstep(struct tfa_device *tfa, unsigned short new_value)
+{
+
+	/* Set the new value in the struct */
+	tfa->vstep = new_value - 1;
+
+	/* Set the new value in the hw register */
+	tfa_set_bf_volatile(tfa, TFA9861_BF_SWVSTEP, new_value);
+
+	return new_value;
+}
+
+static int tfa9861_get_swvstep(struct tfa_device *tfa)
+{
+	return tfa_get_bf(tfa, TFA9861_BF_SWVSTEP) - 1;
+}
+
+/* tfa98xx_dsp_system_stable
+*  return: *ready = 1 when clocks are stable to allow DSP subsystem access
+*/
+static enum Tfa98xx_Error tfa9861_dsp_system_stable(struct tfa_device *tfa, int *ready)
+{
+	enum Tfa98xx_Error error = Tfa98xx_Error_Ok;
+
+	/* check CLKS: ready if set */
+	*ready = tfa_get_bf(tfa, TFA9861_BF_CLKS) == 1;
+
+	return error;
+}
+
+void tfa9861_ops(struct tfa_device_ops *ops)
+{
+	/* Set defaults for ops */
+	tfa_set_ops_defaults(ops);
+
+	ops->get_mtpb = NULL; /* no mtp, used as check for new efuse types */
+	ops->tfa_init = tfa9861_specific;
+	ops->set_swprof = tfa9861_set_swprofile;
+	ops->get_swprof = tfa9861_get_swprofile;
+	ops->set_swvstep = tfa9861_set_swvstep;
+	ops->get_swvstep = tfa9861_get_swvstep;
+	ops->dsp_system_stable = tfa9861_dsp_system_stable;
+	ops->set_mute = tfa_set_mute_nodsp;
+	ops->tfa_set_bitfield = tfa9861_set_bitfield;
+}
+
+/***********************************************************************************/
 /* TFD1015                                                                         */
 /***********************************************************************************/
 

@@ -55,6 +55,7 @@ void tfa9896_ops(struct tfa_device_ops *ops);
 void tfa9890_ops(struct tfa_device_ops *ops);
 void tfa9895_ops(struct tfa_device_ops *ops);
 void tfa9894_ops(struct tfa_device_ops *ops);
+void tfa9861_ops(struct tfa_device_ops *ops);
 
 #ifndef MIN
 #define MIN(A,B) (A<B?A:B)
@@ -411,6 +412,17 @@ void tfa_set_query_info(struct tfa_device *tfa)
 		tfa->advance_keys_handling = 1; /*artf65038*/
 		tfa->daimap = Tfa98xx_DAI_TDM;
 		tfd1015_ops(&tfa->dev_ops); /* register device operations */
+		break;
+	case 0x61:
+	case 0x63:
+		/* tfa9861 */
+		tfa->supportDrc = supportYes;
+		tfa->tfa_family = 2;
+		tfa->spkr_count = 1;
+		tfa->is_probus_device = 1;
+		tfa->advance_keys_handling = 1; /*artf65038*/
+		tfa->daimap = Tfa98xx_DAI_TDM;
+		tfa9861_ops(&tfa->dev_ops); /* register device operations */
 		break;
 	case 0x66:
 		/* tfa986x */

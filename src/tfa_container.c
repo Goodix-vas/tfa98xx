@@ -29,6 +29,7 @@ TFA986X_NAMETABLE
 TFA986XN2_NAMETABLE
 TFA9867_NAMETABLE
 TFA9867B_NAMETABLE
+TFA9867N2_NAMETABLE
 TFD1015_NAMETABLE
 TFA9861_NAMETABLE
 
@@ -36,6 +37,7 @@ TFA986X_BITNAMETABLE
 TFA986XN2_BITNAMETABLE
 TFA9867_BITNAMETABLE
 TFA9867B_BITNAMETABLE
+TFA9867N2_BITNAMETABLE
 TFD1015_BITNAMETABLE
 TFA9861_BITNAMETABLE
 
@@ -2489,9 +2491,13 @@ uint16_t tfaContBfEnumByNameRevid(const char* name, unsigned int revid)
 
 	switch (revid & 0xff) {
 	case 0x15:	// TFD1015Nx
-		bfnum = tfa_name2bf(Tfd1015DatasheetNames, name);
-		if (bfnum == 0xffff)
-			bfnum = tfa_name2bf(Tfd1015BitNames, name);
+		switch (revid) {
+		case 0x00000a15:
+			bfnum = tfa_name2bf(Tfd1015DatasheetNames, name);
+			if (bfnum == 0xffff)
+				bfnum = tfa_name2bf(Tfd1015BitNames, name);
+			break;
+		}
 		break;
 	case 0x64:	// Initial 64 or the 66 Nx variants
 	case 0x65:	// Initial 65 or the 66 Nx variants
@@ -2537,6 +2543,33 @@ uint16_t tfaContBfEnumByNameRevid(const char* name, unsigned int revid)
 			bfnum = tfa_name2bf(Tfa9867BDatasheetNames, name);
 			if (bfnum == 0xffff)
 				bfnum = tfa_name2bf(Tfa9867BBitNames, name);
+			break;
+		case 0x00100a67: //67N2
+		case 0x00101a67:
+        case 0x00102a67:
+			bfnum = tfa_name2bf(Tfa9867N2DatasheetNames, name);
+			if (bfnum == 0xffff)
+				bfnum = tfa_name2bf(Tfa9867N2BitNames, name);
+			break;
+		}
+		break;
+	case 0x61:	// 61Nx
+		switch (revid) {
+		case 0x00000a61:
+		case 0x00001a61:
+			bfnum = tfa_name2bf(Tfa9861DatasheetNames, name);
+			if (bfnum == 0xffff)
+				bfnum = tfa_name2bf(Tfa9861BitNames, name);
+			break;
+		}
+		break;
+	case 0x63:	// 61Nx
+		switch (revid) {
+		case 0x00000a63:
+		case 0x00001a63:
+			bfnum = tfa_name2bf(Tfa9861DatasheetNames, name);
+			if (bfnum == 0xffff)
+				bfnum = tfa_name2bf(Tfa9861BitNames, name);
 			break;
 		}
 		break;

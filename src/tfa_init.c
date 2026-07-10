@@ -1649,7 +1649,24 @@ static enum Tfa98xx_Error tfa9867_specific(struct tfa_device *tfa)
 	enum Tfa98xx_Error error = Tfa98xx_Error_Ok;
 	unsigned short value, xor, rc;
 	unsigned short irqmask;
+	int type=0;
+	
+	if ((tfa->rev & 0xff) == 0x67) {
+		type = tfa_get_bf(tfa, 0x0687) & 0x3;
 
+		switch (type)
+		{
+			case 0x0: //N1
+				tfa->rev += 0;
+			break;
+			case 0x1: //N2
+				tfa->rev += 0x100000;
+			break;
+			default:
+			break;
+		}
+	}
+	
 	tfa->revid = tfa->rev;
 	
 	if (tfa->in_use == 0)
@@ -1743,7 +1760,69 @@ static enum Tfa98xx_Error tfa9867_specific(struct tfa_device *tfa)
 		tfa_reg_write(tfa, 0xdd, 0x01b6); //POR=0x01dc
 		/* ----- generated code end   ----- */
 		break;
-
+	case 0x100a67: /* Initial revision ID TFA9867 N2A0 */
+        /* ----- generated code start(V6) ----- */
+        /* -----  version 21 ----- */
+        tfa_reg_write(tfa, 0x08, 0x007a); //POR=0x00d2
+        tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
+        tfa_reg_write(tfa, 0x54, 0xa0e2); //POR=0xa0e0
+        tfa_reg_write(tfa, 0x5a, 0x5f40); //POR=0x36a0
+        tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
+        tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
+        tfa_reg_write(tfa, 0x5f, 0x0080); //POR=0x00c0
+        tfa_reg_write(tfa, 0x62, 0x06c6); //POR=0x0582
+        tfa_reg_write(tfa, 0x63, 0x80d4); //POR=0x0602
+        tfa_reg_write(tfa, 0x65, 0x0c58); //POR=0x0458
+        tfa_reg_write(tfa, 0x67, 0x062a); //POR=0x0602
+        tfa_reg_write(tfa, 0x68, 0x0820); //POR=0x0c20
+        tfa_reg_write(tfa, 0x69, 0x0119); //POR=0x0319
+        tfa_reg_write(tfa, 0x74, 0x6094); //POR=0x4c14
+        tfa_reg_write(tfa, 0x75, 0x15ff); //POR=0x49e0
+        tfa_reg_write(tfa, 0x7c, 0x10f2); //POR=0x1602
+        /* ----- generated code end   ----- */
+		break;
+	case 0x101a67: /* Initial revision ID TFA9867 N2A1 */
+        /* ----- generated code start(V6) ----- */
+        /* -----  version 21 ----- */
+        tfa_reg_write(tfa, 0x08, 0x007a); //POR=0x00d2
+        tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
+        tfa_reg_write(tfa, 0x54, 0xa0e2); //POR=0xa0e0
+        tfa_reg_write(tfa, 0x5a, 0x5f40); //POR=0x36a0
+        tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
+        tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
+        tfa_reg_write(tfa, 0x5f, 0x0080); //POR=0x00c0
+        tfa_reg_write(tfa, 0x62, 0x06c6); //POR=0x0582
+        tfa_reg_write(tfa, 0x63, 0x80d4); //POR=0x0602
+        tfa_reg_write(tfa, 0x65, 0x0c58); //POR=0x0458
+        tfa_reg_write(tfa, 0x67, 0x062a); //POR=0x0602
+        tfa_reg_write(tfa, 0x68, 0x0820); //POR=0x0c20
+        tfa_reg_write(tfa, 0x69, 0x0119); //POR=0x0319
+        tfa_reg_write(tfa, 0x74, 0x6094); //POR=0x4c14
+        tfa_reg_write(tfa, 0x75, 0x15ff); //POR=0x49e0
+        tfa_reg_write(tfa, 0x7c, 0x10f2); //POR=0x1602
+        /* ----- generated code end   ----- */
+		break;
+	case 0x102a67: /* Initial revision ID TFA9867 N2A2 */
+        /* ----- generated code start(V6) ----- */
+        /* -----  version 21 ----- */
+        tfa_reg_write(tfa, 0x08, 0x007a); //POR=0x00d2
+        tfa_reg_write(tfa, 0x50, 0xc000); //POR=0x8000
+        tfa_reg_write(tfa, 0x54, 0xa0e2); //POR=0xa0e0
+        tfa_reg_write(tfa, 0x5a, 0x5f40); //POR=0x36a0
+        tfa_reg_write(tfa, 0x5b, 0x74e2); //POR=0x7329
+        tfa_reg_write(tfa, 0x5c, 0xb02b); //POR=0xde96
+        tfa_reg_write(tfa, 0x5f, 0x0080); //POR=0x00c0
+        tfa_reg_write(tfa, 0x62, 0x06c6); //POR=0x0582
+        tfa_reg_write(tfa, 0x63, 0x80d4); //POR=0x0602
+        tfa_reg_write(tfa, 0x65, 0x0c58); //POR=0x0458
+        tfa_reg_write(tfa, 0x67, 0x062a); //POR=0x0602
+        tfa_reg_write(tfa, 0x68, 0x0820); //POR=0x0c20
+        tfa_reg_write(tfa, 0x69, 0x0119); //POR=0x0319
+        tfa_reg_write(tfa, 0x74, 0x6094); //POR=0x4c14
+        tfa_reg_write(tfa, 0x75, 0x15ff); //POR=0x49e0
+        tfa_reg_write(tfa, 0x7c, 0x10f2); //POR=0x1602
+        /* ----- generated code end   ----- */
+		break;
 	default:
 		pr_info("\nWarning: Optimal settings not found for device with revid = 0x%x \n", tfa->revid);
 		break;

@@ -6,7 +6,7 @@
  * published by the Free Software Foundation.
  *
  */
- /** Filename: tfa9861_tfafieldnames.h
+/** Filename: tfa9861_tfafieldnames.h
  *  This file was generated automatically on 02/03/26 at 18:13:34. 
  *  Source file: TFA9861_GPA5_N1A0_I2C_RegisterMap.xlsx
  */

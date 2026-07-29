@@ -2573,6 +2573,26 @@ uint16_t tfaContBfEnumByNameRevid(const char* name, unsigned int revid)
 			break;
 		}
 		break;
+	case 0x61:	// 61Nx
+		switch (revid) {
+		case 0x00000a61:
+		case 0x00001a61:
+			bfnum = tfa_name2bf(Tfa9861DatasheetNames, name);
+			if (bfnum == 0xffff)
+				bfnum = tfa_name2bf(Tfa9861BitNames, name);
+			break;
+		}
+		break;
+	case 0x63:	// 61Nx
+		switch (revid) {
+		case 0x00000a63:
+		case 0x00001a63:
+			bfnum = tfa_name2bf(Tfa9861DatasheetNames, name);
+			if (bfnum == 0xffff)
+				bfnum = tfa_name2bf(Tfa9861BitNames, name);
+			break;
+		}
+		break;
 	default:
 		/* Not yet supported for other revid */
 		bfnum = 0xffff;

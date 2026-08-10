@@ -658,11 +658,15 @@ typedef struct TfaProfileList {
  */
 typedef struct TfaLiveDataList {
 	uint32_t length:8;		// nr of items in the list
-	uint32_t ID:24;			// profile ID
+	uint32_t ID:16;			// profile ID
+	uint32_t length_hi:8;
 	TfaDescPtr_t name;	        // livedata name
 	TfaDescPtr_t list[];	        // items list
 } TfaLiveDataList_t;
 #define TFA_LIVEDATAID 0x5678
+
+// effective item count, extends legacy 8-bit length to 16 bits while staying .cnt-compatible
+#define TFA_LIVEDATA_LENGTH(p)	(((uint32_t)(p)->length_hi << 8) | (p)->length)
 
 /*
  * Bitfield descriptor

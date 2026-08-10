@@ -40,6 +40,7 @@ typedef struct TfaIrqName {
 #include "tfa986xn2_tfafieldnames.h"
 #include "tfa9867_tfafieldnames.h"
 #include "tfa9867_tfafieldnames_B.h"
+#include "tfa9867_tfafieldnames_N2.h"
 #include "tfd1015_tfdfieldnames.h"
 #include "tfa9861_tfafieldnames.h"
 

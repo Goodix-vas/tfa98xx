@@ -2567,6 +2567,8 @@ uint16_t tfaContBfEnumByNameRevid(const char* name, unsigned int revid)
 		switch (revid) {
 		case 0x00000a63:
 		case 0x00001a63:
+		case 0x00002a63:
+		case 0x00003a63:
 			bfnum = tfa_name2bf(Tfa9861DatasheetNames, name);
 			if (bfnum == 0xffff)
 				bfnum = tfa_name2bf(Tfa9861BitNames, name);

@@ -21,6 +21,8 @@
 #define TFA9861_I2CVERSION_N1A3 4
 #define TFA9863_I2CVERSION_N1A0 2
 #define TFA9863_I2CVERSION_N1A1 2
+#define TFA9863_I2CVERSION_N1A2 1
+#define TFA9863_I2CVERSION_N1A3 1
 
 typedef enum tfa9861BfEnumList {
     TFA9861_BF_PWDN  = 0x0000,    /*!< Power-down selection                               */
